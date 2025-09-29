@@ -46,7 +46,10 @@
     .reel { width: min(30vw, 190px); height: min(60vw, 360px); overflow:hidden; border-radius: 18px; border:1px solid rgba(255,255,255,.12); background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.3)); position: relative; box-shadow: inset 0 12px 40px rgba(0,0,0,.5); }
     .strip { position:absolute; top:0; left:0; right:0; will-change:transform; filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
     .strip.spin-blur { filter: blur(1.2px) drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
-    .symbol { display:flex; align-items:center; justify-content:center; height:120px; font-size:62px; text-shadow: 0 2px 10px rgba(0,0,0,.45); }
+    .symbol { display:flex; align-items:center; justify-content:center; height:120px; font-size:62px; text-shadow: 0 2px 10px rgba(0,0,0,.45) }
+    .symbol .emoji{ display:none; font-size:58px }
+    body.no-svg .symbol svg{ display:none }
+    body.no-svg .symbol .emoji{ display:block }
 
     .lever{ position:absolute; right:-40px; top:6px; width:12px; height:200px; background:linear-gradient(180deg,#a8a8a8,#555); border-radius:999px; box-shadow:inset 0 0 10px rgba(0,0,0,.7); transform-origin:top; transition: transform .22s ease; }
     .lever::after{ content:""; position:absolute; bottom:-16px; left:50%; transform:translateX(-50%); width:48px; height:48px; border-radius:999px; background:radial-gradient(circle at 30% 30%, #ffefbd, #ffbe55 45%, #c77600); box-shadow:0 0 0 2px rgba(0,0,0,.6), 0 12px 20px rgba(0,0,0,.65) }
@@ -124,7 +127,7 @@
 </head>
 <body>
   <!-- SVG icons (crisp symbols) -->
-  <svg width="0" height="0" style="position:absolute">
+  <svg width="0" height="0" style="position:absolute" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <symbol id="gem-blue" viewBox="0 0 64 64">
       <defs><linearGradient id="gb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9ee6ff"/><stop offset="1" stop-color="#0aa3ff"/></linearGradient></defs>
       <path d="M32 4 8 20l8 28h32l8-28z" fill="url(#gb)" stroke="#0e69b6" stroke-width="2"/>
@@ -277,7 +280,8 @@
 
     /* === Slot temel === */
     const SVGs = ['gem-blue','gem-red','crown'];
-    const symbols = SVGs.map(id => `<svg width="56" height="56"><use href="#${id}"/></svg>`);
+    const EMOJIS = ['🍋','🍒','🔔'];
+    const symbols = SVGs.map((id,idx) => `<div class="symwrap"><svg width="56" height="56" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><use href="#${id}" xlink:href="#${id}"></use></svg><span class=\"emoji\" aria-hidden=\"true\">${EMOJIS[idx%EMOJIS.length]}</span></div>`);
     const ROW_H = 120, VISIBLE = 3, REPEAT = 90;
     const strips = ['strip1','strip2','strip3'].map(id=>document.getElementById(id));
     strips.forEach(s=>{
@@ -285,6 +289,17 @@
       for(let i=0;i<REPEAT;i++){ const el=document.createElement('div'); el.className='symbol'; el.innerHTML = symbols[i%symbols.length]; frag.appendChild(el); }
       s.appendChild(frag); s.style.transform='translateY(0)';
     });
+
+    // SVG fallback tespiti (bazı tarayıcılarda <use> görünmeyebilir)
+    try{
+      const test = document.createElementNS('http://www.w3.org/2000/svg','svg');
+      const use = document.createElementNS('http://www.w3.org/2000/svg','use');
+      use.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href','#gem-blue');
+      test.appendChild(use); document.body.appendChild(test);
+      const bbox = test.getBBox();
+      if(!bbox || !bbox.width){ document.body.classList.add('no-svg'); }
+      test.remove();
+    }catch(e){ document.body.classList.add('no-svg'); }
 
     const machine = document.getElementById('machine');
     const reelWrap = document.getElementById('reelWrap');
@@ -313,9 +328,6 @@
     btnSpin.textContent = SPIN_VARIANTS[abSeed % SPIN_VARIANTS.length];
 
     /* === WebAudio sesleri === */
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    let soundOn = JSON.parse(localStorage.getItem('soundOn') ?? 'true');
-    let vibOn = JSON.parse(localStorage.getItem('vibOn') ?? 'true');
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let soundOn = JSON.parse(localStorage.getItem('soundOn') ?? 'true');
     let vibOn = JSON.parse(localStorage.getItem('vibOn') ?? 'true');
@@ -401,7 +413,6 @@
 
     // Exit intent (masaüstü): üst kenara yaklaşınca modal
     document.addEventListener('mousemove', (e)=>{ if(e.clientY < 14){ const link = pickLinkWithUTM('exit_intent'); goBtn.href = link; doneModal.style.display = 'flex'; } }, {passive:true});
-    <script>
     // Settings interactions
     const btnSettings = document.getElementById('btnSettings');
     const panelSettings = document.getElementById('panelSettings');
