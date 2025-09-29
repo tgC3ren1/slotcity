@@ -398,7 +398,13 @@
       if(streak===3){ showToast('+₺25 bonus'); }
       if(streak===5){ showToast('MEGA SPIN!'); document.getElementById('mega').style.display='flex'; }
 
-      if(spinsDone>=totalSpins){ const link = pickLinkWithUTM('modal'); goBtn.href = link; doneModal.style.display = 'flex'; }
+      if(spinsDone>=totalSpins){
+        if(spinsDone>0){
+          const link = pickLinkWithUTM('modal');
+          goBtn.href = link;
+          doneModal.style.display = 'flex';
+        }
+       }
       spinning = false;
     }
 
