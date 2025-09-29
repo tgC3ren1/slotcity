@@ -313,14 +313,19 @@
     btnSpin.textContent = SPIN_VARIANTS[abSeed % SPIN_VARIANTS.length];
 
     /* === WebAudio sesleri === */
-    const AC = window.AudioContext || window.webkitAudioContext;
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let soundOn = JSON.parse(localStorage.getItem('soundOn') ?? 'true');
     let vibOn = JSON.parse(localStorage.getItem('vibOn') ?? 'true');
-    const AC = window.AudioContext || window.webkitAudioContext;
-    const audio = new AC();
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let soundOn = JSON.parse(localStorage.getItem('soundOn') ?? 'true');
+    let vibOn = JSON.parse(localStorage.getItem('vibOn') ?? 'true');
+    let audio = null; try{ audio = new AudioCtx(); }catch(e){ audio = null; }
     function tone(f=880, ms=120, gain=0.07, type='sine'){
-      if(!soundOn) return; const o=audio.createOscillator(), g=audio.createGain(); o.type=type; o.frequency.value=f; g.gain.value=gain;
-      o.connect(g).connect(audio.destination); o.start(); setTimeout(()=>o.stop(), ms);
+      if(!soundOn || !audio) return;
+      const o=audio.createOscillator(), g=audio.createGain();
+      o.type=type; o.frequency.value=f; g.gain.value=gain;
+      o.connect(g).connect(audio.destination); o.start();
+      setTimeout(()=>o.stop(), ms);
     }
     function motorStart(){ tone(180,140,.035,'sawtooth'); }
     function motorRun(step){ tone(220+step*10,60,.02,'sawtooth'); }
@@ -395,7 +400,7 @@
     setTimeout(startCTA, 4000);
 
     // Exit intent (masaüstü): üst kenara yaklaşınca modal
-    document.addEventListener('mousemove', (e)=>{ if(e.clientY < 14){ const link = pickLinkWithUTM('modal'); goBtn.href = link; doneModal.style.display = 'flex';true});
+    document.addEventListener('mousemove', (e)=>{ if(e.clientY < 14){ const link = pickLinkWithUTM('exit_intent'); goBtn.href = link; doneModal.style.display = 'flex'; } }, {passive:true});
     <script>
     // Settings interactions
     const btnSettings = document.getElementById('btnSettings');
