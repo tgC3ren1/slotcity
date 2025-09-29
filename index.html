@@ -2,10 +2,8 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ultra-Premium Demo Slot • 1000 TL Şartsız Deneme Bonusu</title>
-  <meta name="description" content="Demo slot oyunu: 3-4 tur otomatik çevir, kazan, sonra 1000 TL şartsız deneme bonusu sunan sitelere yönlendirme."/>
-  <!-- Fonts + Tailwind -->
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fixbet • Demo Slot</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -13,394 +11,194 @@
       theme: {
         extend: {
           fontFamily: { sans: ['Inter','ui-sans-serif','system-ui'] },
-          colors: {
-            ink: '#0b0f14',
-            ink2: '#0e1621',
-            gold: '#ffd770',
-            gold2: '#ffb84a',
-            emerald: '#28e0b9',
-          },
-          boxShadow: {
-            glow: '0 0 0 1px rgba(255, 215, 112, 0.25), 0 0 28px rgba(255, 215, 112, .15)',
-          },
-          keyframes: {
-            shine: { '0%':{transform:'translateX(-100%)'}, '100%':{transform:'translateX(200%)'}},
-            coin: {
-              '0%': { transform:'translate(0,0) scale(0.7)', opacity:1 },
-              '100%': { transform:'translate(var(--x), var(--y)) scale(0.9)', opacity:0 }
-            },
-            winpulse: {
-              '0%,100%': { transform:'scale(1)' },
-              '50%': { transform:'scale(1.05)' }
-            },
-            reelspin: {
-              '0%': { transform:'translateY(0)' },
-              '100%': { transform:'translateY(-100%)' }
-            }
-          },
-          animation: {
-            shine: 'shine 1.2s linear infinite',
-            winpulse: 'winpulse 1s ease-in-out 2',
-          }
+          colors: { gold:'#ffd770', gold2:'#ffb84a' },
+          boxShadow: { glow:'0 0 0 1px rgba(255, 215, 112, .25), 0 0 28px rgba(255, 215, 112, .15)' }
         }
       }
     }
   </script>
   <style>
-    :root{ color-scheme: dark; }
-    body{ background: radial-gradient(1200px 700px at 20% -10%, rgba(255,216,120,.12), transparent 50%),
-                      radial-gradient(1000px 600px at 120% 0%, rgba(40,224,185,.12), transparent 50%),
-                      linear-gradient(180deg, #0b0f14 0%, #0e1621 60%, #0b0f14 100%);
-          min-height:100vh }
-    .glass{ backdrop-filter: blur(14px); background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08)}
-
-    /* ---------- SLOT CORE ---------- */
-    .slot { perspective: 1200px; }
-    .reel { width: 120px; height: 120px; overflow: hidden; border-radius: 1rem; border:1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.35); box-shadow: inset 0 10px 30px rgba(0,0,0,.35); position: relative; }
-    .strip { position: absolute; top:0; left:0; right:0; }
-    .symbol { display:flex; align-items:center; justify-content:center; height:120px; font-size:56px }
-    .lever { position:absolute; right:-26px; top:-16px; width: 10px; height: 160px; background: linear-gradient(180deg,#999,#444); border-radius:999px; box-shadow: inset 0 0 8px rgba(0,0,0,.6); transform-origin: top; }
-    .lever::after{ content:""; position:absolute; bottom:-12px; left:50%; transform:translateX(-50%); width:40px; height:40px; border-radius:999px; background: radial-gradient(circle at 30% 30%, #ffedb3, #ffb84a 40%, #cc7a00); box-shadow: 0 0 0 2px rgba(0,0,0,.5), 0 10px 18px rgba(0,0,0,.6) }
-    .lever.pull { animation: leverPull .65s cubic-bezier(.2,.6,.2,1); }
-    @keyframes leverPull {
-      0% { transform: rotate(0deg); }
-      40% { transform: rotate(28deg); }
-      100% { transform: rotate(0deg); }
+    :root{ color-scheme:dark }
+    body{
+      min-height:100vh; margin:0;
+      background:
+        radial-gradient(1200px 700px at 20% -10%, rgba(255,216,120,.12), transparent 50%),
+        radial-gradient(1000px 600px at 120% 0%, rgba(40,224,185,.12), transparent 50%),
+        linear-gradient(180deg,#0b0f14 0%, #0e1621 60%, #0b0f14 100%);
+      display:flex; align-items:center; justify-content:center; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:#fff;
     }
-
-    /* reel spinning helper (JS toggles inline animation-duration) */
-    .spinning { animation: reelspin linear infinite; }
-
-    /* Confetti coins */
-    .coin { position: absolute; width: 14px; height:14px; border-radius:999px; background: radial-gradient(circle at 30% 30%, #fff2bf, #ffd770 45%, #ffb84a 70%, #c67a00 100%); pointer-events:none; animation: coin 900ms ease-out forwards; }
-
-    /* Notification */
-    .toast-enter { transform: translateX(120%); opacity: 0; }
-    .toast-active { transform: translateX(0); opacity: 1; transition: all .5s cubic-bezier(.2,.7,.2,1); }
-
-    /* Gold gradient text */
-    .goldtext { background: linear-gradient(90deg,#fff2bf,#ffd770,#ffb84a,#ffd770); -webkit-background-clip:text; background-clip:text; color: transparent; text-shadow: 0 2px 22px rgba(255, 184, 74, .25); }
+    .machine{ width:520px; max-width:92vw; }
+    .frame{ border-radius:28px; border:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.35);
+            box-shadow:0 20px 48px rgba(0,0,0,.45), inset 0 10px 30px rgba(0,0,0,.35); padding:24px; position:relative; }
+    .reel{ width:140px; height:360px; overflow:hidden; border-radius:16px; border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.35); position:relative; }
+    .strip{ position:absolute; top:0; left:0; right:0; will-change:transform; }
+    .symbol{ display:flex; align-items:center; justify-content:center; height:120px; font-size:56px; }
+    .lever{ position:absolute; right:-30px; top:20px; width:10px; height:180px; background:linear-gradient(180deg,#999,#444); border-radius:999px; box-shadow:inset 0 0 8px rgba(0,0,0,.6); transform-origin:top; }
+    .lever::after{ content:""; position:absolute; bottom:-12px; left:50%; transform:translateX(-50%); width:40px; height:40px; border-radius:999px;
+      background:radial-gradient(circle at 30% 30%, #ffedb3, #ffb84a 40%, #cc7a00); box-shadow:0 0 0 2px rgba(0,0,0,.5), 0 10px 18px rgba(0,0,0,.6) }
+    .coin{ position:absolute; width:14px; height:14px; border-radius:999px;
+           background:radial-gradient(circle at 30% 30%, #fff2bf, #ffd770 45%, #ffb84a 70%, #c67a00 100%); pointer-events:none;
+           animation:coin 900ms ease-out forwards }
+    @keyframes coin{0%{transform:translate(0,0) scale(.7);opacity:1}100%{transform:translate(var(--x),var(--y)) scale(.9);opacity:0}}
   </style>
 </head>
-<body class="font-sans text-white antialiased">
-  <!-- HERO -->
-  <header class="relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div class="flex flex-col items-center text-center">
-        <div class="inline-flex items-center gap-3 px-4 py-2 rounded-full glass shadow-glow">
-          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span class="text-sm text-white/80">Ultra-Premium Demo Deneyimi</span>
-        </div>
-        <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-          <span class="goldtext">Biraz Döndür, Kazancı Gör</span> — Sonra Gerçeğe Geç!
-        </h1>
-        <p class="mt-4 max-w-2xl text-white/70">Aşağıdaki demo slot 3–4 tur otomatik döner, kazanımı gösterir. Devamında <span class="text-gold font-semibold">1000 TL ŞARTSIZ Deneme Bonusu</span> sunan sitelere tek tıkla geç.</p>
+<body>
+  <div class="machine">
+    <div class="frame">
+      <div class="flex items-center justify-center gap-5">
+        <div class="reel"><div class="strip" id="strip1"></div></div>
+        <div class="reel"><div class="strip" id="strip2"></div></div>
+        <div class="reel"><div class="strip" id="strip3"></div></div>
+        <div id="lever" class="lever"></div>
       </div>
-    </div>
-  </header>
 
-  <!-- SLOT WRAPPER -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-    <section class="glass rounded-3xl p-6 sm:p-10 shadow-glow">
-      <div class="grid lg:grid-cols-2 gap-10 items-center">
-        <!-- Slot Machine -->
-        <div>
-          <div class="relative mx-auto w-[420px] max-w-full">
-            <!-- Machine frame -->
-            <div class="absolute -top-10 left-1/2 -translate-x-1/2 text-center">
-              <div class="text-sm uppercase tracking-[.25em] text-white/60">Demo Slot</div>
-              <div class="mt-1 h-[3px] w-40 bg-gradient-to-r from-transparent via-gold to-transparent animate-shine"></div>
-            </div>
-
-            <div class="relative rounded-[28px] border border-white/10 bg-black/30 shadow-2xl px-6 py-6">
-              <!-- Reels -->
-              <div class="slot flex items-center justify-center gap-4">
-                <div class="reel" id="reel1"><div class="strip" id="strip1"></div></div>
-                <div class="reel" id="reel2"><div class="strip" id="strip2"></div></div>
-                <div class="reel" id="reel3"><div class="strip" id="strip3"></div></div>
-                <div class="lever" id="lever"></div>
-              </div>
-
-              <!-- Panel -->
-              <div class="mt-6 grid grid-cols-3 gap-3 text-center">
-                <div class="glass rounded-2xl p-3">
-                  <div class="text-xs text-white/60">Bahis</div>
-                  <div class="text-xl font-bold">₺4</div>
-                </div>
-                <div class="glass rounded-2xl p-3">
-                  <div class="text-xs text-white/60">Tur</div>
-                  <div id="spinCount" class="text-xl font-bold">0/4</div>
-                </div>
-                <div class="glass rounded-2xl p-3">
-                  <div class="text-xs text-white/60">Kazanç</div>
-                  <div id="winAmount" class="text-xl font-extrabold text-gold">₺0</div>
-                </div>
-              </div>
-
-              <div class="mt-6 flex items-center justify-center gap-3">
-                <button id="btnSpin" class="px-6 py-3 rounded-2xl bg-gradient-to-b from-gold to-gold2 text-black font-extrabold shadow-glow hover:brightness-105 active:brightness-95">Döndür</button>
-                <button id="btnAuto" class="px-6 py-3 rounded-2xl bg-white/10 text-white font-semibold hover:bg-white/15">Auto (4)</button>
-              </div>
-
-              <div id="winBanner" class="mt-6 hidden text-center">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/15 text-emerald-300 font-semibold animate-winpulse">
-                  <span>🎉</span>
-                  <span>Büyük Kazanç!</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <p class="mt-6 text-sm text-white/60 text-center">Not: Bu demo görsel amaçlıdır. Sonuçlar gerçek oyun sonuçlarını temsil etmez.</p>
+      <div class="mt-6 grid grid-cols-3 gap-3 text-center">
+        <div class="rounded-2xl px-4 py-3 bg-white/5">
+          <div class="text-xs text-white/60">Bahis</div>
+          <div class="text-xl font-bold">₺4</div>
         </div>
-
-        <!-- CTA Column -->
-        <div>
-          <div class="space-y-5">
-            <h2 class="text-3xl sm:text-4xl font-extrabold goldtext">1000 TL ŞARTSIZ Deneme Bonusu</h2>
-            <p class="text-white/70 leading-relaxed">Kazancı hissettin mi? Şimdi sırada gerçek fırsat var. Aşağıdaki güvenilir platformlardan birine geçerek hesabını oluştur ve <span class="text-gold font-semibold">şartsız 1000 TL deneme bonusunu</span> değerlendir.</p>
-          </div>
-
-          <!-- Bots Grid (9 adet) -->
-          <div id="bots" class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Her kartın href'ini değiştir -->
-            <a href="#" class="group block glass rounded-2xl p-4 hover:shadow-glow transition">
-              <div class="text-sm text-white/60">Bot #1</div>
-              <div class="mt-1 font-bold">Platform 1</div>
-              <div class="mt-3 text-xs text-white/50">1000 TL Şartsız • Hızlı kayıt</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-gold font-semibold">Hemen Katıl <span>→</span></div>
-            </a>
-            <a href="#" class="group block glass rounded-2xl p-4 hover:shadow-glow transition">
-              <div class="text-sm text-white/60">Bot #2</div>
-              <div class="mt-1 font-bold">Platform 2</div>
-              <div class="mt-3 text-xs text-white/50">1000 TL Şartsız • Hızlı kayıt</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-gold font-semibold">Hemen Katıl <span>→</span></div>
-            </a>
-            <a href="#" class="group block glass rounded-2xl p-4 hover:shadow-glow transition">
-              <div class="text-sm text-white/60">Bot #3</div>
-              <div class="mt-1 font-bold">Platform 3</div>
-              <div class="mt-3 text-xs text-white/50">1000 TL Şartsız • Hızlı kayıt</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-gold font-semibold">Hemen Katıl <span>→</span></div>
-            </a>
-            <a href="#" class="group block glass rounded-2xl p-4 hover:shadow-glow transition">
-              <div class="text-sm text-white/60">Bot #4</div>
-              <div class="mt-1 font-bold">Platform 4</div>
-              <div class="mt-3 text-xs text-white/50">1000 TL Şartsız • Hızlı kayıt</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-gold font-semibold">Hemen Katıl <span>→</span></div>
-            </a>
-            <a href="#" class="group block glass rounded-2xl p-4 hover:shadow-glow transition">
-              <div class="text-sm text-white/60">Bot #5</div>
-              <div class="mt-1 font-bold">Platform 5</div>
-              <div class="mt-3 text-xs text-white/50">1000 TL Şartsız • Hızlı kayıt</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-gold font-semibold">Hemen Katıl <span>→</span></div>
-            </a>
-            <a href="#" class="group block glass rounded-2xl p-4 hover:shadow-glow transition">
-              <div class="text-sm text-white/60">Bot #6</div>
-              <div class="mt-1 font-bold">Platform 6</div>
-              <div class="mt-3 text-xs text-white/50">1000 TL Şartsız • Hızlı kayıt</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-gold font-semibold">Hemen Katıl <span>→</span></div>
-            </a>
-            <a href="#" class="group block glass rounded-2xl p-4 hover:shadow-glow transition">
-              <div class="text-sm text-white/60">Bot #7</div>
-              <div class="mt-1 font-bold">Platform 7</div>
-              <div class="mt-3 text-xs text-white/50">1000 TL Şartsız • Hızlı kayıt</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-gold font-semibold">Hemen Katıl <span>→</span></div>
-            </a>
-            <a href="#" class="group block glass rounded-2xl p-4 hover:shadow-glow transition">
-              <div class="text-sm text-white/60">Bot #8</div>
-              <div class="mt-1 font-bold">Platform 8</div>
-              <div class="mt-3 text-xs text-white/50">1000 TL Şartsız • Hızlı kayıt</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-gold font-semibold">Hemen Katıl <span>→</span></div>
-            </a>
-            <a href="#" class="group block glass rounded-2xl p-4 hover:shadow-glow transition">
-              <div class="text-sm text-white/60">Bot #9</div>
-              <div class="mt-1 font-bold">Platform 9</div>
-              <div class="mt-3 text-xs text-white/50">1000 TL Şartsız • Hızlı kayıt</div>
-              <div class="mt-4 inline-flex items-center gap-1 text-gold font-semibold">Hemen Katıl <span>→</span></div>
-            </a>
-          </div>
-
-          <div class="mt-6 text-xs text-white/40">* Yasal uyarı: Bu bir pazarlama sayfasıdır. Oyunlar şans içerir; lütfen sorumlu oynayın.</div>
+        <div class="rounded-2xl px-4 py-3 bg-white/5">
+          <div class="text-xs text-white/60">Tur</div>
+          <div id="spinCount" class="text-xl font-bold">0/4</div>
+        </div>
+        <div class="rounded-2xl px-4 py-3 bg-white/5">
+          <div class="text-xs text-white/60">Kazanç</div>
+          <div id="winAmount" class="text-xl font-extrabold" style="color:#ffd770">₺0</div>
         </div>
       </div>
-    </section>
-  </main>
 
-  <!-- Push-like Notification -->
-  <div id="toast" class="fixed top-6 right-6 w-[360px] max-w-[92vw] glass rounded-2xl p-4 shadow-glow toast-enter opacity-0 pointer-events-none">
-    <div class="flex items-start gap-3">
-      <div class="shrink-0 w-10 h-10 rounded-xl bg-gradient-to-b from-gold to-gold2"></div>
-      <div class="flex-1">
-        <div class="text-sm text-white/60">Kazandın!</div>
-        <div class="mt-1 font-extrabold">Daha Fazla Kazanmak İster misin?</div>
-        <div class="mt-2 text-sm text-white/70">1000 TL <span class="text-gold font-semibold">ŞARTSIZ</span> deneme bonusu olan sitelere git.</div>
-        <div class="mt-3 flex gap-2">
-          <a href="#bots" class="px-4 py-2 rounded-xl bg-gradient-to-b from-gold to-gold2 text-black font-bold">Siteleri Gör</a>
-          <button id="toastClose" class="px-3 py-2 rounded-xl bg-white/10 text-white">Kapat</button>
-        </div>
+      <div class="mt-6 flex items-center justify-center gap-3">
+        <button id="btnSpin" class="px-6 py-3 rounded-2xl bg-gradient-to-b from-gold to-gold2 text-black font-extrabold shadow-glow hover:brightness-105 active:brightness-95">Döndür</button>
+        <button id="btnAuto" class="px-6 py-3 rounded-2xl bg-white/10 text-white font-semibold hover:bg-white/15">Auto (4)</button>
       </div>
     </div>
   </div>
 
   <script>
-    // ------------ Slot Logic ------------
-    const symbols = ['🍋','🍒','🔔','⭐','💎','7️⃣','🍀'];
-    const reels = [
-      { strip: document.getElementById('strip1'), target: 0 },
-      { strip: document.getElementById('strip2'), target: 0 },
-      { strip: document.getElementById('strip3'), target: 0 },
+    // --------- Linkler (rastgele yönlendirme için) ---------
+    const LINKS = [
+      "https://t.me/mockerabi_bot",
+      "https://t.me/tarafbetGitBOT",
+      "https://t.me/betine_denemebonusbot",
+      "https://t.me/denemekutubot",
+      "https://t.me/DenemeKutusubot",
+      "https://t.me/Denemebonusuveren1bot",
+      "https://t.me/Marsbahis1casibombot",
+      "https://t.me/Yapayzekabah1sbot"
     ];
 
-    // Fill strips with duplicated symbols for a smooth loop
-    reels.forEach((r, idx)=>{
+    // --------- Slot Ayarları ---------
+    const symbols = ["🍋","🍒","🔔","⭐","💎","7️⃣","🍀"];
+    const ROW_H = 120;          // tek sembol yüksekliği
+    const VISIBLE = 3;          // görünür satır sayısı
+    const REPEAT = 90;          // strip uzunluğu (satır)
+    const strips = [ "strip1","strip2","strip3" ].map(id => document.getElementById(id));
+
+    // Şeritleri doldur
+    strips.forEach(s=>{
       const frag = document.createDocumentFragment();
-      for(let i=0;i<18;i++){ // 18 rows => tall loop
-        const el = document.createElement('div');
-        el.className='symbol';
+      for(let i=0;i<REPEAT;i++){
+        const el = document.createElement("div");
+        el.className = "symbol";
         el.textContent = symbols[i % symbols.length];
         frag.appendChild(el);
       }
-      r.strip.appendChild(frag);
+      s.appendChild(frag);
+      s.style.transform = "translateY(0px)";
     });
 
-    const lever = document.getElementById('lever');
-    const btnSpin = document.getElementById('btnSpin');
-    const btnAuto = document.getElementById('btnAuto');
-    const spinCountEl = document.getElementById('spinCount');
-    const winAmountEl = document.getElementById('winAmount');
-    const winBanner = document.getElementById('winBanner');
-    const toast = document.getElementById('toast');
-    const toastClose = document.getElementById('toastClose');
+    const lever = document.getElementById("lever");
+    const btnSpin = document.getElementById("btnSpin");
+    const btnAuto = document.getElementById("btnAuto");
+    const spinCountEl = document.getElementById("spinCount");
+    const winAmountEl = document.getElementById("winAmount");
 
-    let spinning = false;
-    let autoSpinsLeft = 0;
-    let totalSpins = 4; // plan: 4 tur
+    let totalSpins = 4;   // toplam tur hakkı
     let spinsDone = 0;
+    let spinning = false;
 
-    function formatTRY(n){
-      return '₺' + Number(n).toLocaleString('tr-TR');
-    }
+    const idx = s => symbols.indexOf(s);
+    const fmt = n => "₺" + Number(n).toLocaleString("tr-TR");
 
-    function updateSpinUI(){
-      spinCountEl.textContent = `${spinsDone}/${totalSpins}`;
-    }
+    // Senaryo: 1-2 küçük kazanç, 3 boş, 4 büyük kazanç
+    const riggedTargets = () => {
+      if (spinsDone===0) return ["🍒","🍒","🍒"];
+      if (spinsDone===1) return ["⭐","⭐","⭐"];
+      if (spinsDone===2) return ["🍋","🔔","7️⃣"];
+      return ["💎","💎","💎"];
+    };
+
+    function updateSpinUI(){ spinCountEl.textContent = `${spinsDone}/${totalSpins}`; }
 
     function coinsBurst(x,y,count=18){
       for(let i=0;i<count;i++){
-        const c = document.createElement('div');
-        c.className = 'coin';
-        const ang = Math.random()*Math.PI*2;
-        const dist = 120 + Math.random()*120;
-        c.style.setProperty('--x', Math.cos(ang)*dist+'px');
-        c.style.setProperty('--y', (Math.sin(ang)*dist-60)+'px');
-        c.style.left = x+'px';
-        c.style.top = y+'px';
-        document.body.appendChild(c);
-        setTimeout(()=>c.remove(), 950);
+        const c = document.createElement("div");
+        c.className = "coin";
+        const ang = Math.random()*Math.PI*2, dist = 120 + Math.random()*120;
+        c.style.setProperty("--x", Math.cos(ang)*dist+"px");
+        c.style.setProperty("--y", (Math.sin(ang)*dist-60)+"px");
+        c.style.left = x+"px"; c.style.top = y+"px";
+        document.body.appendChild(c); setTimeout(()=>c.remove(), 950);
       }
     }
-
-    function riggedTargets() {
-      // 1-2. tur: küçük kazanç, 3. tur: boş, 4. tur: büyük kazanç
-      if (spinsDone === 0) return ['🍒','🍒','🍒'];
-      if (spinsDone === 1) return ['⭐','⭐','⭐'];
-      if (spinsDone === 2) return ['🍋','🔔','7️⃣'];
-      return ['💎','💎','💎'];
-    }
-
-    function symbolIndex(sym){ return symbols.indexOf(sym); }
 
     async function spinOnce(){
-      if(spinning) return;
-      spinning = true;
-      lever.classList.add('pull');
-      setTimeout(()=>lever.classList.remove('pull'), 650);
+      if(spinning) return; spinning = true;
 
-      // choose targets for this spin
-      const tSyms = riggedTargets();
-      reels.forEach((r,i)=>{ r.target = symbolIndex(tSyms[i]); });
+      // kol animasyonu (basit)
+      lever.style.animation = "lever .65s cubic-bezier(.2,.6,.2,1)";
+      setTimeout(()=> lever.style.animation = "", 650);
 
-      // Start spinning: add class and dynamic duration
-      reels.forEach((r,i)=>{
-        const dur = 900 + i*300; // cascade stop
-        r.strip.style.animation = `reelspin ${dur}ms linear infinite`;
-        r.strip.classList.add('spinning');
+      const targets = riggedTargets().map(idx); // sayısal hedefler
+      // dönüş (CSS transition ile gerçek hareket)
+      strips.forEach((s,i)=>{
+        const dur = 1200 + i*300;           // kademeli duruş
+        const rounds = 10 + i*2;            // tam tur sayısı
+        const stopRow = rounds*symbols.length + (targets[i] + Math.floor(VISIBLE/2)); // orta satırda dursun
+        s.style.transition = `transform ${dur}ms cubic-bezier(.2,.6,.2,1)`;
+        s.style.transform  = `translateY(-${stopRow*ROW_H}px)`;
       });
 
-      // Wait, then stop with snap to target row (center visible index = 1)
-      await new Promise(res=> setTimeout(res, 1200));
+      const wait = 1200 + 2*300 + 60;
+      await new Promise(r=>setTimeout(r, wait));
 
-      reels.forEach((r,i)=>{
-        r.strip.classList.remove('spinning');
-        r.strip.style.animation = '';
-        // Snap: we know each row is 120px height
-        const rowH = 120;
-        const loopRows = 18;
-        const visibleIndex = 1; // center window
-        // choose a row such that (row % symbols.length) == r.target and is near center
-        let stopRow = r.target + visibleIndex; // simple alignment
-        const translate = - (stopRow % loopRows) * rowH;
-        r.strip.style.transform = `translateY(${translate}px)`;
+      // normalize
+      strips.forEach((s,i)=>{
+        s.style.transition = "";
+        const finalTranslate = -((targets[i] + Math.floor(VISIBLE/2)) % REPEAT) * ROW_H;
+        s.style.transform = `translateY(${finalTranslate}px)`;
       });
 
-      // Evaluate result
-      spinsDone++;
-      updateSpinUI();
-
-      let payout = 0;
-      const winLines = [
-        ['🍒','🍒','🍒', 12],
-        ['⭐','⭐','⭐', 24],
-        ['💎','💎','💎', 320],
-      ];
-      const cur = riggedTargets();
-      for(const w of winLines){
-        if(w[0]===cur[0] && w[1]===cur[1] && w[2]===cur[2]){ payout = w[3]; break; }
-      }
-
+      // ödeme
+      const combos = [ ["🍒","🍒","🍒",12], ["⭐","⭐","⭐",24], ["💎","💎","💎",320] ];
+      const cur = riggedTargets(); let payout = 0;
+      for(const c of combos){ if(c[0]===cur[0]&&c[1]===cur[1]&&c[2]===cur[2]){ payout=c[3]; break; } }
       if(payout>0){
-        winBanner.classList.remove('hidden');
-        winAmountEl.textContent = formatTRY(Number(winAmountEl.textContent.replace(/[^\d]/g,'')) + payout);
-        const rect = winAmountEl.getBoundingClientRect();
-        coinsBurst(rect.left+rect.width/2, rect.top+window.scrollY-10, payout>100?28:16);
-        setTimeout(()=>winBanner.classList.add('hidden'), 1300);
+        winAmountEl.textContent = fmt(Number(winAmountEl.textContent.replace(/[^\\d]/g,"")) + payout);
+        const r = winAmountEl.getBoundingClientRect();
+        coinsBurst(r.left + r.width/2, r.top + window.scrollY - 10, payout>100?28:16);
       }
 
-      // After final spin, show toast
+      spinsDone++; updateSpinUI();
+
+      // tur hakkı bitince rastgele linke yönlendir
       if(spinsDone >= totalSpins){
-        showToast();
+        const link = LINKS[Math.floor(Math.random()*LINKS.length)];
+        window.location.href = link;
       }
-
       spinning = false;
     }
 
-    function showToast(){
-      toast.classList.add('toast-active');
-      toast.style.pointerEvents = 'auto';
-    }
-
-    btnSpin.addEventListener('click', spinOnce);
-    btnAuto.addEventListener('click', ()=>{
+    btnSpin.addEventListener("click", spinOnce);
+    btnAuto.addEventListener("click", async ()=>{
       if(spinning) return;
-      autoSpinsLeft = totalSpins - spinsDone;
-      (async function loop(){
-        while(autoSpinsLeft>0){
-          await spinOnce();
-          autoSpinsLeft--;
-          await new Promise(res=> setTimeout(res, 500));
-        }
-      })();
+      const remain = totalSpins - spinsDone;
+      for(let i=0;i<remain;i++){ await spinOnce(); await new Promise(r=>setTimeout(r, 350)); }
     });
 
-    toastClose.addEventListener('click', ()=>{
-      toast.classList.remove('toast-active');
-      toast.style.pointerEvents = 'none';
-    });
-
-    // Auto start on load
-    window.addEventListener('load', ()=>{
-      btnAuto.click();
-    });
+    // sayfa açılınca otomatik 4 tur
+    window.addEventListener("load", ()=> btnAuto.click());
   </script>
 </body>
 </html>
