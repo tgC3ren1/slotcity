@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fixbet • Demo Slot</title>
+  <title>Fixbet • Slot</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -12,7 +12,12 @@
         extend: {
           fontFamily: { sans: ['Inter','ui-sans-serif','system-ui'] },
           colors: { gold:'#ffd770', gold2:'#ffb84a' },
-          boxShadow: { glow:'0 0 0 1px rgba(255, 215, 112, .25), 0 0 28px rgba(255, 215, 112, .15)' }
+          boxShadow: { glow:'0 0 0 1px rgba(255, 215, 112, .25), 0 0 28px rgba(255, 215, 112, .15)' },
+          keyframes:{
+            coin:{ '0%':{transform:'translate(0,0) scale(.7)',opacity:1}, '100%':{transform:'translate(var(--x),var(--y)) scale(.9)',opacity:0} },
+            pulse:{ '0%,100%':{filter:'brightness(1)'}, '50%':{filter:'brightness(1.25)'} }
+          },
+          animation:{ coin:'coin 900ms ease-out forwards', pulse:'pulse .7s ease-in-out 2' }
         }
       }
     }
@@ -25,8 +30,8 @@
         radial-gradient(1200px 700px at 20% -10%, rgba(255,216,120,.12), transparent 50%),
         radial-gradient(1000px 600px at 120% 0%, rgba(40,224,185,.12), transparent 50%),
         linear-gradient(180deg,#0b0f14 0%, #0e1621 60%, #0b0f14 100%);
-      display:flex; align-items:center; justify-content:center; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-      color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color:#fff;
     }
     .machine{ width:520px; max-width:92vw; }
     .frame{ border-radius:28px; border:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.35);
@@ -34,13 +39,13 @@
     .reel{ width:140px; height:360px; overflow:hidden; border-radius:16px; border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.35); position:relative; }
     .strip{ position:absolute; top:0; left:0; right:0; will-change:transform; }
     .symbol{ display:flex; align-items:center; justify-content:center; height:120px; font-size:56px; }
-    .lever{ position:absolute; right:-30px; top:20px; width:10px; height:180px; background:linear-gradient(180deg,#999,#444); border-radius:999px; box-shadow:inset 0 0 8px rgba(0,0,0,.6); transform-origin:top; }
+    .lever{ position:absolute; right:-30px; top:20px; width:10px; height:180px; background:linear-gradient(180deg,#999,#444); border-radius:999px;
+            box-shadow:inset 0 0 8px rgba(0,0,0,.6); transform-origin:top; }
     .lever::after{ content:""; position:absolute; bottom:-12px; left:50%; transform:translateX(-50%); width:40px; height:40px; border-radius:999px;
-      background:radial-gradient(circle at 30% 30%, #ffedb3, #ffb84a 40%, #cc7a00); box-shadow:0 0 0 2px rgba(0,0,0,.5), 0 10px 18px rgba(0,0,0,.6) }
+                   background:radial-gradient(circle at 30% 30%, #ffedb3, #ffb84a 40%, #cc7a00); box-shadow:0 0 0 2px rgba(0,0,0,.5), 0 10px 18px rgba(0,0,0,.6) }
     .coin{ position:absolute; width:14px; height:14px; border-radius:999px;
-           background:radial-gradient(circle at 30% 30%, #fff2bf, #ffd770 45%, #ffb84a 70%, #c67a00 100%); pointer-events:none;
-           animation:coin 900ms ease-out forwards }
-    @keyframes coin{0%{transform:translate(0,0) scale(.7);opacity:1}100%{transform:translate(var(--x),var(--y)) scale(.9);opacity:0}}
+           background:radial-gradient(circle at 30% 30%, #fff2bf, #ffd770 45%, #ffb84a 70%, #c67a00 100%); pointer-events:none }
+    .modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:20px }
   </style>
 </head>
 <body>
@@ -68,15 +73,26 @@
         </div>
       </div>
 
-      <div class="mt-6 flex items-center justify-center gap-3">
+      <div class="mt-6 flex items-center justify-center">
         <button id="btnSpin" class="px-6 py-3 rounded-2xl bg-gradient-to-b from-gold to-gold2 text-black font-extrabold shadow-glow hover:brightness-105 active:brightness-95">Döndür</button>
-        <button id="btnAuto" class="px-6 py-3 rounded-2xl bg-white/10 text-white font-semibold hover:bg-white/15">Auto (4)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final Modal -->
+  <div id="doneModal" class="modal">
+    <div class="max-w-md w-full rounded-2xl bg-[#101621] border border-white/10 p-6 text-center shadow-glow">
+      <div class="text-2xl font-extrabold">Bakiyenizi çekmeniz için</div>
+      <div class="mt-2 text-white/80">botumuza <b>abone olun</b> ve <b>anlaşmalı siteye</b> gidin.</div>
+      <div class="mt-5 flex items-center justify-center gap-3">
+        <a id="goBtn" target="_blank" rel="noopener" class="px-6 py-3 rounded-2xl bg-gradient-to-b from-gold to-gold2 text-black font-extrabold shadow-glow hover:brightness-105">Devam Et</a>
+        <button id="closeBtn" class="px-6 py-3 rounded-2xl bg-white/10 text-white hover:bg-white/15">Kapat</button>
       </div>
     </div>
   </div>
 
   <script>
-    // --------- Linkler (rastgele yönlendirme için) ---------
+    /* === Rastgele yönlendirme linkleri === */
     const LINKS = [
       "https://t.me/mockerabi_bot",
       "https://t.me/tarafbetGitBOT",
@@ -88,35 +104,25 @@
       "https://t.me/Yapayzekabah1sbot"
     ];
 
-    // --------- Slot Ayarları ---------
+    /* === Slot temel === */
     const symbols = ["🍋","🍒","🔔","⭐","💎","7️⃣","🍀"];
-    const ROW_H = 120;          // tek sembol yüksekliği
-    const VISIBLE = 3;          // görünür satır sayısı
-    const REPEAT = 90;          // strip uzunluğu (satır)
-    const strips = [ "strip1","strip2","strip3" ].map(id => document.getElementById(id));
-
-    // Şeritleri doldur
+    const ROW_H = 120, VISIBLE = 3, REPEAT = 90;
+    const strips = ["strip1","strip2","strip3"].map(id=>document.getElementById(id));
     strips.forEach(s=>{
       const frag = document.createDocumentFragment();
-      for(let i=0;i<REPEAT;i++){
-        const el = document.createElement("div");
-        el.className = "symbol";
-        el.textContent = symbols[i % symbols.length];
-        frag.appendChild(el);
-      }
-      s.appendChild(frag);
-      s.style.transform = "translateY(0px)";
+      for(let i=0;i<REPEAT;i++){ const el=document.createElement("div"); el.className="symbol"; el.textContent=symbols[i%symbols.length]; frag.appendChild(el); }
+      s.appendChild(frag); s.style.transform="translateY(0)";
     });
 
     const lever = document.getElementById("lever");
     const btnSpin = document.getElementById("btnSpin");
-    const btnAuto = document.getElementById("btnAuto");
     const spinCountEl = document.getElementById("spinCount");
     const winAmountEl = document.getElementById("winAmount");
+    const doneModal = document.getElementById("doneModal");
+    const goBtn = document.getElementById("goBtn");
+    const closeBtn = document.getElementById("closeBtn");
 
-    let totalSpins = 4;   // toplam tur hakkı
-    let spinsDone = 0;
-    let spinning = false;
+    let totalSpins = 4, spinsDone = 0, spinning = false;
 
     const idx = s => symbols.indexOf(s);
     const fmt = n => "₺" + Number(n).toLocaleString("tr-TR");
@@ -129,33 +135,54 @@
       return ["💎","💎","💎"];
     };
 
-    function updateSpinUI(){ spinCountEl.textContent = `${spinsDone}/${totalSpins}`; }
+    function updateSpinUI(){ spinCountEl.textContent = `${spinsDone}/${totalSpins}`;}
 
     function coinsBurst(x,y,count=18){
       for(let i=0;i<count;i++){
-        const c = document.createElement("div");
-        c.className = "coin";
-        const ang = Math.random()*Math.PI*2, dist = 120 + Math.random()*120;
+        const c=document.createElement("div"); c.className="coin animate-coin";
+        const ang=Math.random()*Math.PI*2, dist=120+Math.random()*120;
         c.style.setProperty("--x", Math.cos(ang)*dist+"px");
         c.style.setProperty("--y", (Math.sin(ang)*dist-60)+"px");
-        c.style.left = x+"px"; c.style.top = y+"px";
-        document.body.appendChild(c); setTimeout(()=>c.remove(), 950);
+        c.style.left=x+"px"; c.style.top=y+"px";
+        document.body.appendChild(c); c.classList.add("animate-coin"); setTimeout(()=>c.remove(), 950);
       }
+    }
+
+    /* === Basit ses motoru (WebAudio) === */
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const audio = new AudioCtx();
+    function beep(freq=880, ms=120, gain=0.07){ const o=audio.createOscillator(), g=audio.createGain(); o.type="sine"; o.frequency.value=freq; g.gain.value=gain; o.connect(g).connect(audio.destination); o.start(); setTimeout(()=>{o.stop();}, ms); }
+    function winSound(){ // üç kısa cümle
+      beep(740,120); setTimeout(()=>beep(880,120),140); setTimeout(()=>beep(1040,180,0.09),290);
+    }
+    function bigWinSound(){ // uzun, tatmin edici
+      const seq=[600,740,880,1040,1320]; let t=0; for(const f of seq){ setTimeout(()=>beep(f,150,0.09), t); t+=160; }
+    }
+
+    function animateAmount(toAdd){
+      const cur = Number(winAmountEl.textContent.replace(/[^0-9]/g,"")) || 0;
+      const target = cur + toAdd;
+      const start = performance.now(), dur = 520;
+      winAmountEl.classList.add("animate-pulse");
+      requestAnimationFrame(function step(ts){
+        const p = Math.min(1, (ts-start)/dur);
+        const val = Math.round(cur + (target-cur)*p);
+        winAmountEl.textContent = fmt(val);
+        if(p<1) requestAnimationFrame(step); else setTimeout(()=>winAmountEl.classList.remove("animate-pulse"),120);
+      });
     }
 
     async function spinOnce(){
       if(spinning) return; spinning = true;
+      try{ audio.resume && audio.resume(); }catch{}
+      // kol hareketi (küçük)
+      lever.style.transform = "rotate(28deg)"; setTimeout(()=>lever.style.transform="rotate(0deg)", 260);
 
-      // kol animasyonu (basit)
-      lever.style.animation = "lever .65s cubic-bezier(.2,.6,.2,1)";
-      setTimeout(()=> lever.style.animation = "", 650);
-
-      const targets = riggedTargets().map(idx); // sayısal hedefler
-      // dönüş (CSS transition ile gerçek hareket)
+      const targets = riggedTargets().map(idx);
+      // dönüş
       strips.forEach((s,i)=>{
-        const dur = 1200 + i*300;           // kademeli duruş
-        const rounds = 10 + i*2;            // tam tur sayısı
-        const stopRow = rounds*symbols.length + (targets[i] + Math.floor(VISIBLE/2)); // orta satırda dursun
+        const dur = 1200 + i*300, rounds = 10 + i*2;
+        const stopRow = rounds*symbols.length + (targets[i] + Math.floor(VISIBLE/2));
         s.style.transition = `transform ${dur}ms cubic-bezier(.2,.6,.2,1)`;
         s.style.transform  = `translateY(-${stopRow*ROW_H}px)`;
       });
@@ -171,34 +198,32 @@
       });
 
       // ödeme
-      const combos = [ ["🍒","🍒","🍒",12], ["⭐","⭐","⭐",24], ["💎","💎","💎",320] ];
-      const cur = riggedTargets(); let payout = 0;
-      for(const c of combos){ if(c[0]===cur[0]&&c[1]===cur[1]&&c[2]===cur[2]){ payout=c[3]; break; } }
+      const combos = [ ["🍒","🍒","🍒", 12], ["⭐","⭐","⭐", 24], ["💎","💎","💎", 320] ];
+      const curSym = riggedTargets();
+      let payout = 0; for(const c of combos){ if(c[0]===curSym[0]&&c[1]===curSym[1]&&c[2]===curSym[2]){ payout=c[3]; break; } }
+
       if(payout>0){
-        winAmountEl.textContent = fmt(Number(winAmountEl.textContent.replace(/[^\\d]/g,"")) + payout);
+        animateAmount(payout);
         const r = winAmountEl.getBoundingClientRect();
-        coinsBurst(r.left + r.width/2, r.top + window.scrollY - 10, payout>100?28:16);
+        coinsBurst(r.left+r.width/2, r.top+window.scrollY-10, payout>100?28:16);
+        (payout>=100? bigWinSound : winSound)();
       }
 
       spinsDone++; updateSpinUI();
 
-      // tur hakkı bitince rastgele linke yönlendir
-      if(spinsDone >= totalSpins){
+      if(spinsDone>=totalSpins){
+        // modal + rastgele yönlendirme
         const link = LINKS[Math.floor(Math.random()*LINKS.length)];
-        window.location.href = link;
+        goBtn.href = link;
+        doneModal.style.display = "flex";
       }
+
       spinning = false;
     }
 
     btnSpin.addEventListener("click", spinOnce);
-    btnAuto.addEventListener("click", async ()=>{
-      if(spinning) return;
-      const remain = totalSpins - spinsDone;
-      for(let i=0;i<remain;i++){ await spinOnce(); await new Promise(r=>setTimeout(r, 350)); }
-    });
-
-    // sayfa açılınca otomatik 4 tur
-    window.addEventListener("load", ()=> btnAuto.click());
+    closeBtn.addEventListener("click", ()=> doneModal.style.display="none");
+    goBtn.addEventListener("click", ()=> doneModal.style.display="none");
   </script>
 </body>
 </html>
