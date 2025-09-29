@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Fixbet • 3D Slot</title>
+<title>Fixbet • 3D Advanced Slot</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -15,9 +15,10 @@
       keyframes:{
         coin:{'0%':{transform:'translate(0,0) scale(.7)',opacity:1},'100%':{transform:'translate(var(--x),var(--y)) scale(.9)',opacity:0}},
         shine:{'0%':{transform:'translateX(-120%)'},'100%':{transform:'translateX(220%)'}},
-        tick:{'0%,100%':{transform:'translateY(0)'},'50%':{transform:'translateY(-2px)'}}
+        tick:{'0%,100%':{transform:'translateY(0)'},'50%':{transform:'translateY(-2px)'}},
+        bump:{'0%,100%':{transform:'translateZ(0) scale(1)'},'40%':{transform:'translateZ(30px) scale(1.04)'}}
       },
-      animation:{ coin:'coin .9s ease-out forwards', tick:'tick .08s ease-out' }
+      animation:{ coin:'coin .9s ease-out forwards', tick:'tick .08s ease-out', bump:'bump .5s ease-out' }
     }}
   }
 </script>
@@ -35,53 +36,50 @@
   /* --- 3D Makine --- */
   .rig { perspective: 1600px; }
   .machine {
-    width: 620px; max-width: 96vw; transform-style: preserve-3d;
-    border-radius: 30px; padding: 28px;
+    width: 660px; max-width: 96vw; transform-style: preserve-3d;
+    border-radius: 30px; padding: 30px;
     background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.28));
     border: 1px solid rgba(255,255,255,.08);
     box-shadow:
       0 30px 60px rgba(0,0,0,.55),
       inset 0 20px 40px rgba(0,0,0,.45),
       inset 0 -10px 20px rgba(255,255,255,.05);
+    transition: transform .5s cubic-bezier(.2,.6,.2,1);
   }
-  .machine.spin-tilt { transform: rotateX(6deg) rotateY(-6deg); transition: transform .25s ease; }
-  .machine.rest      { transform: rotateX(0deg) rotateY(0deg);  transition: transform .5s cubic-bezier(.2,.6,.2,1); }
-
+  .machine.spin-tilt { transform: rotateX(7deg) rotateY(-7deg); }
   .bezel {
-    position: relative; border-radius: 20px; padding: 16px;
+    position: relative; border-radius: 22px; padding: 18px;
     background: radial-gradient(circle at 50% -60%, rgba(255,255,255,.14), transparent 60%),
                 linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
     border: 1px solid rgba(255,255,255,.08);
     box-shadow: inset 0 10px 25px rgba(0,0,0,.35);
   }
-  .reflection {
-    pointer-events:none; position:absolute; inset:0; border-radius:20px; overflow:hidden;
-  }
+  .reflection { pointer-events:none; position:absolute; inset:0; border-radius:22px; overflow:hidden; }
   .reflection::before{
     content:""; position:absolute; top:0; left:-40%;
     width:40%; height:100%; transform: skewX(-18deg);
     background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
-    animation: shine 2.6s linear infinite;
+    animation: shine 3s linear infinite;
   }
 
   .reel {
-    width: 160px; height: 360px; overflow:hidden;
+    width: 170px; height: 360px; overflow:hidden;
     border-radius: 18px; border:1px solid rgba(255,255,255,.12);
     background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.3));
     position: relative; box-shadow: inset 0 12px 40px rgba(0,0,0,.5);
   }
-  .strip { position:absolute; top:0; left:0; right:0; will-change:transform; filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
-  .strip.spin-blur { filter: blur(1.2px) drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+  .strip { position:absolute; top:0; left:0; right:0; will-change:transform; filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
+  .strip.spin-blur { filter: blur(1.2px) drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
   .symbol {
     display:flex; align-items:center; justify-content:center;
-    height:120px; font-size:58px; text-shadow: 0 2px 10px rgba(0,0,0,.45);
+    height:120px; font-size:62px; text-shadow: 0 2px 10px rgba(0,0,0,.45);
   }
 
-  .lever{ position:absolute; right:-34px; top:10px; width:12px; height:190px;
+  .lever{ position:absolute; right:-40px; top:6px; width:12px; height:200px;
           background:linear-gradient(180deg,#a8a8a8,#555); border-radius:999px;
-          box-shadow:inset 0 0 10px rgba(0,0,0,.7); transform-origin:top; }
-  .lever::after{ content:""; position:absolute; bottom:-14px; left:50%; transform:translateX(-50%);
-          width:44px; height:44px; border-radius:999px;
+          box-shadow:inset 0 0 10px rgba(0,0,0,.7); transform-origin:top; transition: transform .22s ease; }
+  .lever::after{ content:""; position:absolute; bottom:-16px; left:50%; transform:translateX(-50%);
+          width:48px; height:48px; border-radius:999px;
           background:radial-gradient(circle at 30% 30%, #ffefbd, #ffbe55 45%, #c77600);
           box-shadow:0 0 0 2px rgba(0,0,0,.6), 0 12px 20px rgba(0,0,0,.65) }
 
@@ -97,7 +95,7 @@
 </head>
 <body>
   <div class="rig">
-    <div id="machine" class="machine rest">
+    <div id="machine" class="machine">
       <div class="bezel">
         <div class="reflection"></div>
         <div class="flex items-center justify-center gap-6 relative">
@@ -148,6 +146,7 @@ const LINKS = [
 /* === Slot temel === */
 const symbols = ["🍋","🍒","🔔","⭐","💎","7️⃣","🍀"];
 const ROW_H = 120, VISIBLE = 3, REPEAT = 90;
+// daha “gerçekçi” görünüm: şeritler uzun, blur ve hızlan-yavaşlan
 const strips = ["strip1","strip2","strip3"].map(id=>document.getElementById(id));
 strips.forEach(s=>{
   const frag = document.createDocumentFragment();
@@ -166,24 +165,32 @@ const closeBtn = document.getElementById("closeBtn");
 
 let totalSpins = 4, spinsDone = 0, spinning = false;
 
-/* === WebAudio: spin & tick & win === */
+/* === WebAudio: motor & tick & win === */
 const AC = window.AudioContext || window.webkitAudioContext;
 const audio = new AC();
 function tone(f=880, ms=120, gain=0.07, type='sine'){
   const o=audio.createOscillator(), g=audio.createGain(); o.type=type; o.frequency.value=f; g.gain.value=gain;
   o.connect(g).connect(audio.destination); o.start(); setTimeout(()=>o.stop(), ms);
 }
-function spinStart(){ tone(220,120,.04,'sawtooth'); }
+function motorStart(){ tone(180,140,.035,'sawtooth'); }
+function motorRun(step){ tone(220+step*10,60,.02,'sawtooth'); }
 function tick(){ tone(600,45,.045,'square'); }
-function winSmall(){ tone(740,100,.07); setTimeout(()=>tone(880,120,.08),120); }
+function winSmall(){ tone(820,120,.08); setTimeout(()=>tone(980,140,.09),120); }
 function winBig(){
-  const seq=[520,660,820,980,1240]; let t=0; for(const f of seq){ setTimeout(()=>tone(f,130,.09),t); t+=150; }
+  const seq=[540,700,860,1020,1260,1480]; let t=0; for(const f of seq){ setTimeout(()=>tone(f,140,.1),t); t+=160; }
 }
 
 /* === Yardımcılar === */
 const idx = s => symbols.indexOf(s);
 const fmt = n => "₺" + Number(n).toLocaleString("tr-TR");
-const riggedTargets = () => {         // 1-2 küçük, 3 boş, 4 büyük
+// Yüksek kazançlar
+const PAY_TABLE = [
+  ["🍒","🍒","🍒",  2000],
+  ["⭐","⭐","⭐",   5000],
+  ["💎","💎","💎", 50000]
+];
+// Senaryo: 1-2 küçük, 3 boş, 4 büyük
+const riggedTargets = () => {
   if (spinsDone===0) return ["🍒","🍒","🍒"];
   if (spinsDone===1) return ["⭐","⭐","⭐"];
   if (spinsDone===2) return ["🍋","🔔","7️⃣"];
@@ -192,13 +199,13 @@ const riggedTargets = () => {         // 1-2 küçük, 3 boş, 4 büyük
 function updateSpinUI(){ spinCountEl.textContent = `${spinsDone}/${totalSpins}`; }
 function amountAnim(add){
   const cur = Number(winAmountEl.textContent.replace(/[^0-9]/g,""))||0, target = cur + add;
-  const start = performance.now(), dur = 520; winAmountEl.classList.add("winflash");
-  requestAnimationFrame(function step(t){ const p=Math.min(1,(t-start)/dur); winAmountEl.textContent=fmt(Math.round(cur+(target-cur)*p)); if(p<1) requestAnimationFrame(step); else setTimeout(()=>winAmountEl.classList.remove("winflash"),200); });
+  const start = performance.now(), dur = 650; winAmountEl.classList.add("winflash");
+  requestAnimationFrame(function step(t){ const p=Math.min(1,(t-start)/dur); winAmountEl.textContent=fmt(Math.round(cur+(target-cur)*p)); if(p<1) requestAnimationFrame(step); else setTimeout(()=>winAmountEl.classList.remove("winflash"),280); });
 }
 function coinsBurst(x,y,count=18){
   for(let i=0;i<count;i++){
     const c=document.createElement("div"); c.className="coin";
-    const ang=Math.random()*Math.PI*2, dist=120+Math.random()*120;
+    const ang=Math.random()*Math.PI*2, dist=140+Math.random()*160;
     c.style.setProperty("--x", Math.cos(ang)*dist+"px");
     c.style.setProperty("--y", (Math.sin(ang)*dist-60)+"px");
     c.style.left=x+"px"; c.style.top=y+"px";
@@ -206,32 +213,50 @@ function coinsBurst(x,y,count=18){
   }
 }
 
-/* === Spin akışı === */
+/* === Daha gerçekçi spin: hızlan -> sabit -> yavaşla (transition + motor sesi) === */
 async function spinOnce(){
   if(spinning) return; spinning = true;
   try{ audio.resume && audio.resume(); }catch{}
-  machine.classList.remove('rest'); machine.classList.add('spin-tilt'); // 3D tilt
-  spinStart();
-  // kol efekti
+  machine.classList.add('spin-tilt');
   lever.style.transform="rotate(28deg)"; setTimeout(()=>lever.style.transform="rotate(0deg)",260);
 
   const targets = riggedTargets().map(idx);
 
+  // motor başla + kısa ramp
+  motorStart(); for(let i=0;i<6;i++) setTimeout(()=>motorRun(i), 80*i);
+
   // dönmeye başla
   strips.forEach((s,i)=>{
-    const dur = 1200 + i*300, rounds = 10 + i*2;
+    const durUp   = 260 + i*40;   // hızlanma
+    const durHold = 700 + i*80;   // sabit
+    const durDown = 520 + i*160;  // yavaşlama (uzun, gerçekçi)
+    const rounds  = 8 + i*2;      // tam tur
     const stopRow = rounds*symbols.length + (targets[i] + Math.floor(VISIBLE/2));
-    s.classList.add('spin-blur');
-    s.style.transition = `transform ${dur}ms cubic-bezier(.2,.6,.2,1)`;
-    s.style.transform  = `translateY(-${stopRow*ROW_H}px)`;
-    // son anda küçük "tick"
-    setTimeout(()=>{ s.classList.remove('spin-blur'); s.classList.add('animate-tick'); tick(); setTimeout(()=>s.classList.remove('animate-tick'),60); }, dur-90);
+
+    // hızlanma
+    s.className = "strip spin-blur";
+    s.style.transition = `transform ${durUp}ms cubic-bezier(.2,.7,.2,1)`;
+    s.style.transform  = `translateY(-${(rounds*0.25)*symbols.length*ROW_H}px)`;
+
+    // sabit
+    setTimeout(()=>{
+      s.style.transition = `transform ${durHold}ms linear`;
+      s.style.transform  = `translateY(-${(rounds*0.75)*symbols.length*ROW_H}px)`;
+    }, durUp);
+
+    // yavaşlama + hedefe kilit
+    setTimeout(()=>{
+      s.style.transition = `transform ${durDown}ms cubic-bezier(.1,.9,.2,1)`;
+      s.style.transform  = `translateY(-${stopRow*ROW_H}px)`;
+      setTimeout(()=>{ s.classList.remove('spin-blur'); s.classList.add('animate-tick'); tick(); setTimeout(()=>s.classList.remove('animate-tick'),60); }, durDown-90);
+    }, durUp+durHold);
   });
 
-  const wait = 1200 + 2*300 + 80;
+  // en uzun sürenin bitmesini bekle
+  const wait = 260+40*2 + 700+80*2 + 520+160*2 + 120;
   await new Promise(r=>setTimeout(r, wait));
 
-  // normalize et
+  // normalize
   strips.forEach((s,i)=>{
     s.style.transition = "";
     const finalTranslate = -((targets[i] + Math.floor(VISIBLE/2)) % REPEAT) * ROW_H;
@@ -239,18 +264,19 @@ async function spinOnce(){
   });
 
   // kazanç
-  const combos = [ ["🍒","🍒","🍒", 12], ["⭐","⭐","⭐", 24], ["💎","💎","💎", 320] ];
   const cur = riggedTargets(); let payout=0;
-  for(const c of combos){ if(c[0]===cur[0]&&c[1]===cur[1]&&c[2]===cur[2]){ payout=c[3]; break; } }
+  for(const w of PAY_TABLE){ if(w[0]===cur[0]&&w[1]===cur[1]&&w[2]===cur[2]){ payout=w[3]; break; } }
   if(payout>0){
     amountAnim(payout);
     const r = winAmountEl.getBoundingClientRect();
-    coinsBurst(r.left+r.width/2, r.top+window.scrollY-10, payout>100?28:16);
-    (payout>=100? winBig : winSmall)();
+    coinsBurst(r.left+r.width/2, r.top+window.scrollY-10, payout>=5000?34:20);
+    (payout>=5000? winBig : winSmall)();
+    machine.classList.add('animate-bump');
+    setTimeout(()=>machine.classList.remove('animate-bump'),500);
   }
 
   spinsDone++; updateSpinUI();
-  machine.classList.remove('spin-tilt'); machine.classList.add('rest');
+  machine.classList.remove('spin-tilt');
 
   if(spinsDone>=totalSpins){
     const link = LINKS[Math.floor(Math.random()*LINKS.length)];
