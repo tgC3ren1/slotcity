@@ -1,80 +1,121 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fixbet • Slot</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter','ui-sans-serif','system-ui'] },
-          colors: { gold:'#ffd770', gold2:'#ffb84a' },
-          boxShadow: { glow:'0 0 0 1px rgba(255, 215, 112, .25), 0 0 28px rgba(255, 215, 112, .15)' },
-          keyframes:{
-            coin:{ '0%':{transform:'translate(0,0) scale(.7)',opacity:1}, '100%':{transform:'translate(var(--x),var(--y)) scale(.9)',opacity:0} },
-            pulse:{ '0%,100%':{filter:'brightness(1)'}, '50%':{filter:'brightness(1.25)'} }
-          },
-          animation:{ coin:'coin 900ms ease-out forwards', pulse:'pulse .7s ease-in-out 2' }
-        }
-      }
-    }
-  </script>
-  <style>
-    :root{ color-scheme:dark }
-    body{
-      min-height:100vh; margin:0;
-      background:
-        radial-gradient(1200px 700px at 20% -10%, rgba(255,216,120,.12), transparent 50%),
-        radial-gradient(1000px 600px at 120% 0%, rgba(40,224,185,.12), transparent 50%),
-        linear-gradient(180deg,#0b0f14 0%, #0e1621 60%, #0b0f14 100%);
-      display:flex; align-items:center; justify-content:center;
-      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; color:#fff;
-    }
-    .machine{ width:520px; max-width:92vw; }
-    .frame{ border-radius:28px; border:1px solid rgba(255,255,255,.1); background:rgba(0,0,0,.35);
-            box-shadow:0 20px 48px rgba(0,0,0,.45), inset 0 10px 30px rgba(0,0,0,.35); padding:24px; position:relative; }
-    .reel{ width:140px; height:360px; overflow:hidden; border-radius:16px; border:1px solid rgba(255,255,255,.12); background:rgba(0,0,0,.35); position:relative; }
-    .strip{ position:absolute; top:0; left:0; right:0; will-change:transform; }
-    .symbol{ display:flex; align-items:center; justify-content:center; height:120px; font-size:56px; }
-    .lever{ position:absolute; right:-30px; top:20px; width:10px; height:180px; background:linear-gradient(180deg,#999,#444); border-radius:999px;
-            box-shadow:inset 0 0 8px rgba(0,0,0,.6); transform-origin:top; }
-    .lever::after{ content:""; position:absolute; bottom:-12px; left:50%; transform:translateX(-50%); width:40px; height:40px; border-radius:999px;
-                   background:radial-gradient(circle at 30% 30%, #ffedb3, #ffb84a 40%, #cc7a00); box-shadow:0 0 0 2px rgba(0,0,0,.5), 0 10px 18px rgba(0,0,0,.6) }
-    .coin{ position:absolute; width:14px; height:14px; border-radius:999px;
-           background:radial-gradient(circle at 30% 30%, #fff2bf, #ffd770 45%, #ffb84a 70%, #c67a00 100%); pointer-events:none }
-    .modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:20px }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Fixbet • 3D Slot</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme:{ extend:{
+      fontFamily:{ sans:['Inter','ui-sans-serif','system-ui'] },
+      colors:{ gold:'#ffd770', gold2:'#ffb84a' },
+      boxShadow:{ glow:'0 0 0 1px rgba(255,215,112,.25), 0 0 28px rgba(255,215,112,.15)' },
+      keyframes:{
+        coin:{'0%':{transform:'translate(0,0) scale(.7)',opacity:1},'100%':{transform:'translate(var(--x),var(--y)) scale(.9)',opacity:0}},
+        shine:{'0%':{transform:'translateX(-120%)'},'100%':{transform:'translateX(220%)'}},
+        tick:{'0%,100%':{transform:'translateY(0)'},'50%':{transform:'translateY(-2px)'}}
+      },
+      animation:{ coin:'coin .9s ease-out forwards', tick:'tick .08s ease-out' }
+    }}
+  }
+</script>
+<style>
+  :root{ color-scheme:dark }
+  body{
+    min-height:100vh; margin:0; color:#fff;
+    background:
+      radial-gradient(1200px 700px at 20% -10%, rgba(255,216,120,.12), transparent 50%),
+      radial-gradient(1000px 600px at 120% 0%, rgba(40,224,185,.12), transparent 50%),
+      linear-gradient(180deg,#0b0f14 0%, #0e1621 60%, #0b0f14 100%);
+    display:flex; align-items:center; justify-content:center; font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial;
+  }
+
+  /* --- 3D Makine --- */
+  .rig { perspective: 1600px; }
+  .machine {
+    width: 620px; max-width: 96vw; transform-style: preserve-3d;
+    border-radius: 30px; padding: 28px;
+    background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.28));
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow:
+      0 30px 60px rgba(0,0,0,.55),
+      inset 0 20px 40px rgba(0,0,0,.45),
+      inset 0 -10px 20px rgba(255,255,255,.05);
+  }
+  .machine.spin-tilt { transform: rotateX(6deg) rotateY(-6deg); transition: transform .25s ease; }
+  .machine.rest      { transform: rotateX(0deg) rotateY(0deg);  transition: transform .5s cubic-bezier(.2,.6,.2,1); }
+
+  .bezel {
+    position: relative; border-radius: 20px; padding: 16px;
+    background: radial-gradient(circle at 50% -60%, rgba(255,255,255,.14), transparent 60%),
+                linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow: inset 0 10px 25px rgba(0,0,0,.35);
+  }
+  .reflection {
+    pointer-events:none; position:absolute; inset:0; border-radius:20px; overflow:hidden;
+  }
+  .reflection::before{
+    content:""; position:absolute; top:0; left:-40%;
+    width:40%; height:100%; transform: skewX(-18deg);
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+    animation: shine 2.6s linear infinite;
+  }
+
+  .reel {
+    width: 160px; height: 360px; overflow:hidden;
+    border-radius: 18px; border:1px solid rgba(255,255,255,.12);
+    background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.3));
+    position: relative; box-shadow: inset 0 12px 40px rgba(0,0,0,.5);
+  }
+  .strip { position:absolute; top:0; left:0; right:0; will-change:transform; filter: drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+  .strip.spin-blur { filter: blur(1.2px) drop-shadow(0 2px 2px rgba(0,0,0,.3)); }
+  .symbol {
+    display:flex; align-items:center; justify-content:center;
+    height:120px; font-size:58px; text-shadow: 0 2px 10px rgba(0,0,0,.45);
+  }
+
+  .lever{ position:absolute; right:-34px; top:10px; width:12px; height:190px;
+          background:linear-gradient(180deg,#a8a8a8,#555); border-radius:999px;
+          box-shadow:inset 0 0 10px rgba(0,0,0,.7); transform-origin:top; }
+  .lever::after{ content:""; position:absolute; bottom:-14px; left:50%; transform:translateX(-50%);
+          width:44px; height:44px; border-radius:999px;
+          background:radial-gradient(circle at 30% 30%, #ffefbd, #ffbe55 45%, #c77600);
+          box-shadow:0 0 0 2px rgba(0,0,0,.6), 0 12px 20px rgba(0,0,0,.65) }
+
+  .coin{ position:absolute; width:14px; height:14px; border-radius:999px;
+         background:radial-gradient(circle at 30% 30%, #fff2bf, #ffd770 45%, #ffb84a 70%, #c67a00 100%); pointer-events:none }
+
+  .panel .cell{ border-radius:16px; background:rgba(255,255,255,.05); padding:12px }
+  .panel .v{ font-weight:800 }
+  .winflash{ box-shadow:0 0 0 2px rgba(255,215,112,.35), 0 0 30px rgba(255,215,112,.25) }
+
+  .modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:20px }
+</style>
 </head>
 <body>
-  <div class="machine">
-    <div class="frame">
-      <div class="flex items-center justify-center gap-5">
-        <div class="reel"><div class="strip" id="strip1"></div></div>
-        <div class="reel"><div class="strip" id="strip2"></div></div>
-        <div class="reel"><div class="strip" id="strip3"></div></div>
-        <div id="lever" class="lever"></div>
-      </div>
+  <div class="rig">
+    <div id="machine" class="machine rest">
+      <div class="bezel">
+        <div class="reflection"></div>
+        <div class="flex items-center justify-center gap-6 relative">
+          <div class="reel"><div class="strip" id="strip1"></div></div>
+          <div class="reel"><div class="strip" id="strip2"></div></div>
+          <div class="reel"><div class="strip" id="strip3"></div></div>
+          <div id="lever" class="lever"></div>
+        </div>
 
-      <div class="mt-6 grid grid-cols-3 gap-3 text-center">
-        <div class="rounded-2xl px-4 py-3 bg-white/5">
-          <div class="text-xs text-white/60">Bahis</div>
-          <div class="text-xl font-bold">₺4</div>
+        <div class="mt-6 grid grid-cols-3 gap-3 panel text-center">
+          <div class="cell"><div class="text-xs text-white/60">Bahis</div><div class="v text-xl">₺4</div></div>
+          <div class="cell"><div class="text-xs text-white/60">Tur</div><div id="spinCount" class="v text-xl">0/4</div></div>
+          <div class="cell"><div class="text-xs text-white/60">Kazanç</div><div id="winAmount" class="v text-xl" style="color:#ffd770">₺0</div></div>
         </div>
-        <div class="rounded-2xl px-4 py-3 bg-white/5">
-          <div class="text-xs text-white/60">Tur</div>
-          <div id="spinCount" class="text-xl font-bold">0/4</div>
-        </div>
-        <div class="rounded-2xl px-4 py-3 bg-white/5">
-          <div class="text-xs text-white/60">Kazanç</div>
-          <div id="winAmount" class="text-xl font-extrabold" style="color:#ffd770">₺0</div>
-        </div>
-      </div>
 
-      <div class="mt-6 flex items-center justify-center">
-        <button id="btnSpin" class="px-6 py-3 rounded-2xl bg-gradient-to-b from-gold to-gold2 text-black font-extrabold shadow-glow hover:brightness-105 active:brightness-95">Döndür</button>
+        <div class="mt-6 flex items-center justify-center">
+          <button id="btnSpin" class="px-7 py-3 rounded-2xl bg-gradient-to-b from-gold to-gold2 text-black font-extrabold shadow-glow hover:brightness-105 active:brightness-95">Döndür</button>
+        </div>
       </div>
     </div>
   </div>
@@ -91,139 +132,138 @@
     </div>
   </div>
 
-  <script>
-    /* === Rastgele yönlendirme linkleri === */
-    const LINKS = [
-      "https://t.me/mockerabi_bot",
-      "https://t.me/tarafbetGitBOT",
-      "https://t.me/betine_denemebonusbot",
-      "https://t.me/denemekutubot",
-      "https://t.me/DenemeKutusubot",
-      "https://t.me/Denemebonusuveren1bot",
-      "https://t.me/Marsbahis1casibombot",
-      "https://t.me/Yapayzekabah1sbot"
-    ];
+<script>
+/* === Rastgele yönlendirme linkleri === */
+const LINKS = [
+  "https://t.me/mockerabi_bot",
+  "https://t.me/tarafbetGitBOT",
+  "https://t.me/betine_denemebonusbot",
+  "https://t.me/denemekutubot",
+  "https://t.me/DenemeKutusubot",
+  "https://t.me/Denemebonusuveren1bot",
+  "https://t.me/Marsbahis1casibombot",
+  "https://t.me/Yapayzekabah1sbot"
+];
 
-    /* === Slot temel === */
-    const symbols = ["🍋","🍒","🔔","⭐","💎","7️⃣","🍀"];
-    const ROW_H = 120, VISIBLE = 3, REPEAT = 90;
-    const strips = ["strip1","strip2","strip3"].map(id=>document.getElementById(id));
-    strips.forEach(s=>{
-      const frag = document.createDocumentFragment();
-      for(let i=0;i<REPEAT;i++){ const el=document.createElement("div"); el.className="symbol"; el.textContent=symbols[i%symbols.length]; frag.appendChild(el); }
-      s.appendChild(frag); s.style.transform="translateY(0)";
-    });
+/* === Slot temel === */
+const symbols = ["🍋","🍒","🔔","⭐","💎","7️⃣","🍀"];
+const ROW_H = 120, VISIBLE = 3, REPEAT = 90;
+const strips = ["strip1","strip2","strip3"].map(id=>document.getElementById(id));
+strips.forEach(s=>{
+  const frag = document.createDocumentFragment();
+  for(let i=0;i<REPEAT;i++){ const el=document.createElement("div"); el.className="symbol"; el.textContent=symbols[i%symbols.length]; frag.appendChild(el); }
+  s.appendChild(frag); s.style.transform="translateY(0)";
+});
 
-    const lever = document.getElementById("lever");
-    const btnSpin = document.getElementById("btnSpin");
-    const spinCountEl = document.getElementById("spinCount");
-    const winAmountEl = document.getElementById("winAmount");
-    const doneModal = document.getElementById("doneModal");
-    const goBtn = document.getElementById("goBtn");
-    const closeBtn = document.getElementById("closeBtn");
+const machine = document.getElementById("machine");
+const lever   = document.getElementById("lever");
+const btnSpin = document.getElementById("btnSpin");
+const spinCountEl = document.getElementById("spinCount");
+const winAmountEl = document.getElementById("winAmount");
+const doneModal = document.getElementById("doneModal");
+const goBtn = document.getElementById("goBtn");
+const closeBtn = document.getElementById("closeBtn");
 
-    let totalSpins = 4, spinsDone = 0, spinning = false;
+let totalSpins = 4, spinsDone = 0, spinning = false;
 
-    const idx = s => symbols.indexOf(s);
-    const fmt = n => "₺" + Number(n).toLocaleString("tr-TR");
+/* === WebAudio: spin & tick & win === */
+const AC = window.AudioContext || window.webkitAudioContext;
+const audio = new AC();
+function tone(f=880, ms=120, gain=0.07, type='sine'){
+  const o=audio.createOscillator(), g=audio.createGain(); o.type=type; o.frequency.value=f; g.gain.value=gain;
+  o.connect(g).connect(audio.destination); o.start(); setTimeout(()=>o.stop(), ms);
+}
+function spinStart(){ tone(220,120,.04,'sawtooth'); }
+function tick(){ tone(600,45,.045,'square'); }
+function winSmall(){ tone(740,100,.07); setTimeout(()=>tone(880,120,.08),120); }
+function winBig(){
+  const seq=[520,660,820,980,1240]; let t=0; for(const f of seq){ setTimeout(()=>tone(f,130,.09),t); t+=150; }
+}
 
-    // Senaryo: 1-2 küçük kazanç, 3 boş, 4 büyük kazanç
-    const riggedTargets = () => {
-      if (spinsDone===0) return ["🍒","🍒","🍒"];
-      if (spinsDone===1) return ["⭐","⭐","⭐"];
-      if (spinsDone===2) return ["🍋","🔔","7️⃣"];
-      return ["💎","💎","💎"];
-    };
+/* === Yardımcılar === */
+const idx = s => symbols.indexOf(s);
+const fmt = n => "₺" + Number(n).toLocaleString("tr-TR");
+const riggedTargets = () => {         // 1-2 küçük, 3 boş, 4 büyük
+  if (spinsDone===0) return ["🍒","🍒","🍒"];
+  if (spinsDone===1) return ["⭐","⭐","⭐"];
+  if (spinsDone===2) return ["🍋","🔔","7️⃣"];
+  return ["💎","💎","💎"];
+};
+function updateSpinUI(){ spinCountEl.textContent = `${spinsDone}/${totalSpins}`; }
+function amountAnim(add){
+  const cur = Number(winAmountEl.textContent.replace(/[^0-9]/g,""))||0, target = cur + add;
+  const start = performance.now(), dur = 520; winAmountEl.classList.add("winflash");
+  requestAnimationFrame(function step(t){ const p=Math.min(1,(t-start)/dur); winAmountEl.textContent=fmt(Math.round(cur+(target-cur)*p)); if(p<1) requestAnimationFrame(step); else setTimeout(()=>winAmountEl.classList.remove("winflash"),200); });
+}
+function coinsBurst(x,y,count=18){
+  for(let i=0;i<count;i++){
+    const c=document.createElement("div"); c.className="coin";
+    const ang=Math.random()*Math.PI*2, dist=120+Math.random()*120;
+    c.style.setProperty("--x", Math.cos(ang)*dist+"px");
+    c.style.setProperty("--y", (Math.sin(ang)*dist-60)+"px");
+    c.style.left=x+"px"; c.style.top=y+"px";
+    document.body.appendChild(c); c.style.animation="coin .9s ease-out forwards"; setTimeout(()=>c.remove(), 920);
+  }
+}
 
-    function updateSpinUI(){ spinCountEl.textContent = `${spinsDone}/${totalSpins}`;}
+/* === Spin akışı === */
+async function spinOnce(){
+  if(spinning) return; spinning = true;
+  try{ audio.resume && audio.resume(); }catch{}
+  machine.classList.remove('rest'); machine.classList.add('spin-tilt'); // 3D tilt
+  spinStart();
+  // kol efekti
+  lever.style.transform="rotate(28deg)"; setTimeout(()=>lever.style.transform="rotate(0deg)",260);
 
-    function coinsBurst(x,y,count=18){
-      for(let i=0;i<count;i++){
-        const c=document.createElement("div"); c.className="coin animate-coin";
-        const ang=Math.random()*Math.PI*2, dist=120+Math.random()*120;
-        c.style.setProperty("--x", Math.cos(ang)*dist+"px");
-        c.style.setProperty("--y", (Math.sin(ang)*dist-60)+"px");
-        c.style.left=x+"px"; c.style.top=y+"px";
-        document.body.appendChild(c); c.classList.add("animate-coin"); setTimeout(()=>c.remove(), 950);
-      }
-    }
+  const targets = riggedTargets().map(idx);
 
-    /* === Basit ses motoru (WebAudio) === */
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    const audio = new AudioCtx();
-    function beep(freq=880, ms=120, gain=0.07){ const o=audio.createOscillator(), g=audio.createGain(); o.type="sine"; o.frequency.value=freq; g.gain.value=gain; o.connect(g).connect(audio.destination); o.start(); setTimeout(()=>{o.stop();}, ms); }
-    function winSound(){ // üç kısa cümle
-      beep(740,120); setTimeout(()=>beep(880,120),140); setTimeout(()=>beep(1040,180,0.09),290);
-    }
-    function bigWinSound(){ // uzun, tatmin edici
-      const seq=[600,740,880,1040,1320]; let t=0; for(const f of seq){ setTimeout(()=>beep(f,150,0.09), t); t+=160; }
-    }
+  // dönmeye başla
+  strips.forEach((s,i)=>{
+    const dur = 1200 + i*300, rounds = 10 + i*2;
+    const stopRow = rounds*symbols.length + (targets[i] + Math.floor(VISIBLE/2));
+    s.classList.add('spin-blur');
+    s.style.transition = `transform ${dur}ms cubic-bezier(.2,.6,.2,1)`;
+    s.style.transform  = `translateY(-${stopRow*ROW_H}px)`;
+    // son anda küçük "tick"
+    setTimeout(()=>{ s.classList.remove('spin-blur'); s.classList.add('animate-tick'); tick(); setTimeout(()=>s.classList.remove('animate-tick'),60); }, dur-90);
+  });
 
-    function animateAmount(toAdd){
-      const cur = Number(winAmountEl.textContent.replace(/[^0-9]/g,"")) || 0;
-      const target = cur + toAdd;
-      const start = performance.now(), dur = 520;
-      winAmountEl.classList.add("animate-pulse");
-      requestAnimationFrame(function step(ts){
-        const p = Math.min(1, (ts-start)/dur);
-        const val = Math.round(cur + (target-cur)*p);
-        winAmountEl.textContent = fmt(val);
-        if(p<1) requestAnimationFrame(step); else setTimeout(()=>winAmountEl.classList.remove("animate-pulse"),120);
-      });
-    }
+  const wait = 1200 + 2*300 + 80;
+  await new Promise(r=>setTimeout(r, wait));
 
-    async function spinOnce(){
-      if(spinning) return; spinning = true;
-      try{ audio.resume && audio.resume(); }catch{}
-      // kol hareketi (küçük)
-      lever.style.transform = "rotate(28deg)"; setTimeout(()=>lever.style.transform="rotate(0deg)", 260);
+  // normalize et
+  strips.forEach((s,i)=>{
+    s.style.transition = "";
+    const finalTranslate = -((targets[i] + Math.floor(VISIBLE/2)) % REPEAT) * ROW_H;
+    s.style.transform = `translateY(${finalTranslate}px)`;
+  });
 
-      const targets = riggedTargets().map(idx);
-      // dönüş
-      strips.forEach((s,i)=>{
-        const dur = 1200 + i*300, rounds = 10 + i*2;
-        const stopRow = rounds*symbols.length + (targets[i] + Math.floor(VISIBLE/2));
-        s.style.transition = `transform ${dur}ms cubic-bezier(.2,.6,.2,1)`;
-        s.style.transform  = `translateY(-${stopRow*ROW_H}px)`;
-      });
+  // kazanç
+  const combos = [ ["🍒","🍒","🍒", 12], ["⭐","⭐","⭐", 24], ["💎","💎","💎", 320] ];
+  const cur = riggedTargets(); let payout=0;
+  for(const c of combos){ if(c[0]===cur[0]&&c[1]===cur[1]&&c[2]===cur[2]){ payout=c[3]; break; } }
+  if(payout>0){
+    amountAnim(payout);
+    const r = winAmountEl.getBoundingClientRect();
+    coinsBurst(r.left+r.width/2, r.top+window.scrollY-10, payout>100?28:16);
+    (payout>=100? winBig : winSmall)();
+  }
 
-      const wait = 1200 + 2*300 + 60;
-      await new Promise(r=>setTimeout(r, wait));
+  spinsDone++; updateSpinUI();
+  machine.classList.remove('spin-tilt'); machine.classList.add('rest');
 
-      // normalize
-      strips.forEach((s,i)=>{
-        s.style.transition = "";
-        const finalTranslate = -((targets[i] + Math.floor(VISIBLE/2)) % REPEAT) * ROW_H;
-        s.style.transform = `translateY(${finalTranslate}px)`;
-      });
+  if(spinsDone>=totalSpins){
+    const link = LINKS[Math.floor(Math.random()*LINKS.length)];
+    goBtn.href = link;
+    doneModal.style.display = "flex";
+  }
+  spinning = false;
+}
 
-      // ödeme
-      const combos = [ ["🍒","🍒","🍒", 12], ["⭐","⭐","⭐", 24], ["💎","💎","💎", 320] ];
-      const curSym = riggedTargets();
-      let payout = 0; for(const c of combos){ if(c[0]===curSym[0]&&c[1]===curSym[1]&&c[2]===curSym[2]){ payout=c[3]; break; } }
-
-      if(payout>0){
-        animateAmount(payout);
-        const r = winAmountEl.getBoundingClientRect();
-        coinsBurst(r.left+r.width/2, r.top+window.scrollY-10, payout>100?28:16);
-        (payout>=100? bigWinSound : winSound)();
-      }
-
-      spinsDone++; updateSpinUI();
-
-      if(spinsDone>=totalSpins){
-        // modal + rastgele yönlendirme
-        const link = LINKS[Math.floor(Math.random()*LINKS.length)];
-        goBtn.href = link;
-        doneModal.style.display = "flex";
-      }
-
-      spinning = false;
-    }
-
-    btnSpin.addEventListener("click", spinOnce);
-    closeBtn.addEventListener("click", ()=> doneModal.style.display="none");
-    goBtn.addEventListener("click", ()=> doneModal.style.display="none");
-  </script>
+/* === Etkinlikler === */
+btnSpin.addEventListener("click", spinOnce);
+closeBtn.addEventListener("click", ()=> doneModal.style.display="none");
+goBtn.addEventListener("click", ()=> doneModal.style.display="none");
+</script>
 </body>
 </html>
