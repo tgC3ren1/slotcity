@@ -1,467 +1,109 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="tr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fixbet • 3D Slot + Olympus Skin</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme:{ extend:{
-        fontFamily:{ sans:['Inter','ui-sans-serif','system-ui'] },
-        colors:{ gold:'#ffd770', gold2:'#ffb84a', emerald:'#2de3b7' },
-        boxShadow:{ glow:'0 0 0 1px rgba(255,215,112,.25), 0 0 28px rgba(255,215,112,.15)' },
-        keyframes:{
-          coin:{'0%':{transform:'translate(0,0) scale(.7)',opacity:1},'100%':{transform:'translate(var(--x),var(--y)) scale(.9)',opacity:0}},
-          shine:{'0%':{transform:'translateX(-120%)'},'100%':{transform:'translateX(220%)'}},
-          tick:{'0%,100%':{transform:'translateY(0)'},'50%':{transform:'translateY(-2px)'}},
-          bump:{'0%,100%':{transform:'translateZ(0) scale(1)'},'40%':{transform:'translateZ(30px) scale(1.04)'}},
-          shake:{'0%,100%':{transform:'translateX(0)'},'20%':{transform:'translateX(-6px)'},'40%':{transform:'translateX(6px)'},'60%':{transform:'translateX(-4px)'},'80%':{transform:'translateX(4px)'}},
-          ticker:{'0%':{transform:'translateX(100%)'},'100%':{transform:'translateX(-100%)'}}
-        },
-        animation:{ coin:'coin .9s ease-out forwards', tick:'tick .08s ease-out', bump:'bump .5s ease-out', shake:'shake .6s ease', ticker:'ticker 20s linear infinite' }
-      }}
-    }
-  </script>
-  <style>
-    :root{ color-scheme:dark }
-    body{
-      min-height:100vh; margin:0; color:#fff;
-      background:
-        radial-gradient(1200px 700px at 20% -10%, rgba(255,216,120,.12), transparent 50%),
-        radial-gradient(1000px 600px at 120% 0%, rgba(40,224,185,.12), transparent 50%),
-        linear-gradient(180deg,#0b0f14 0%, #0e1621 60%, #0b0f14 100%);
-      display:flex; align-items:center; justify-content:center; font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixbet | Zbahis | Matadorbet - Resmi Link Ağı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background: radial-gradient(circle at top, #0f172a 0%, #000 100%);
+        color: #fff;
+      }
+      .glow {
+        box-shadow: 0 0 15px #a9ee16, 0 0 30px rgba(169, 238, 22, 0.3);
+      }
+      .btn {
+        transition: all 0.3s ease;
+      }
+      .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.25);
+      }
+      .gradient-border {
+        border: 2px solid transparent;
+        background-image: linear-gradient(#000, #000),
+          linear-gradient(90deg, #25ffe6, #a9ee16, #ed3903);
+        background-origin: border-box;
+        background-clip: content-box, border-box;
+      }
+      .neon-text {
+        text-shadow: 0 0 5px #a9ee16, 0 0 15px #25ffe6, 0 0 25px #ed3903;
+      }
+    </style>
+  </head>
 
-    .rig { perspective: 1600px; width:100%; padding:16px; }
-    .machine { width: min(760px, 96vw); transform-style: preserve-3d; border-radius: 30px; padding: 18px; position: relative; background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.28)); border: 1px solid rgba(255,255,255,.08); box-shadow: 0 30px 60px rgba(0,0,0,.55), inset 0 20px 40px rgba(0,0,0,.45), inset 0 -10px 20px rgba(255,255,255,.05); transition: transform .5s cubic-bezier(.2,.6,.2,1); margin: 0 auto; }
-    .machine.spin-tilt { transform: rotateX(7deg) rotateY(-7deg); }
-
-    .bezel { position: relative; border-radius: 22px; padding: 14px; background: radial-gradient(circle at 50% -60%, rgba(255,255,255,.14), transparent 60%), linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.08); box-shadow: inset 0 10px 25px rgba(0,0,0,.35); }
-    .reflection { pointer-events:none; position:absolute; inset:0; border-radius:22px; overflow:hidden; }
-    .reflection::before{ content:""; position:absolute; top:0; left:-40%; width:40%; height:100%; transform: skewX(-18deg); background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent); animation: shine 3s linear infinite; }
-
-    .reel { width: min(30vw, 190px); height: min(60vw, 360px); overflow:hidden; border-radius: 18px; border:1px solid rgba(255,255,255,.12); background: linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.3)); position: relative; box-shadow: inset 0 12px 40px rgba(0,0,0,.5); }
-    .strip { position:absolute; top:0; left:0; right:0; will-change:transform; filter: drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
-    .strip.spin-blur { filter: blur(1.2px) drop-shadow(0 2px 2px rgba(0,0,0,.35)); }
-    .symbol { display:flex; align-items:center; justify-content:center; height:120px; font-size:62px; text-shadow: 0 2px 10px rgba(0,0,0,.45) }
-    .symbol .emoji{ display:none; font-size:58px }
-    body.no-svg .symbol svg{ display:none }
-    body.no-svg .symbol .emoji{ display:block }
-
-    .lever{ position:absolute; right:-40px; top:6px; width:12px; height:200px; background:linear-gradient(180deg,#a8a8a8,#555); border-radius:999px; box-shadow:inset 0 0 10px rgba(0,0,0,.7); transform-origin:top; transition: transform .22s ease; }
-    .lever::after{ content:""; position:absolute; bottom:-16px; left:50%; transform:translateX(-50%); width:48px; height:48px; border-radius:999px; background:radial-gradient(circle at 30% 30%, #ffefbd, #ffbe55 45%, #c77600); box-shadow:0 0 0 2px rgba(0,0,0,.6), 0 12px 20px rgba(0,0,0,.65) }
-
-    .coin{ position:absolute; width:14px; height:14px; border-radius:999px; background:radial-gradient(circle at 30% 30%, #fff2bf, #ffd770 45%, #ffb84a 70%, #c67a00 100%); pointer-events:none }
-
-    .panel .cell{ border-radius:16px; background:rgba(255,255,255,.05); padding:12px }
-    .panel .v{ font-weight:800 }
-    .winflash{ box-shadow:0 0 0 2px rgba(255,215,112,.35), 0 0 30px rgba(255,215,112,.25) }
-
-    .modal{ position:fixed; inset:0; background:rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding:20px; z-index:50 }
-
-    .progress{ height:10px; border-radius:999px; overflow:hidden }
-    .progress > div{ height:100%; background:linear-gradient(90deg,#ffd770,#ffb84a); width:0% }
-
-    .toast{ position:fixed; left:50%; transform:translateX(-50%); top:16px; padding:10px 14px; background:rgba(20,24,32,.95); border:1px solid rgba(255,255,255,.1); border-radius:12px; box-shadow:0 10px 28px rgba(0,0,0,.35); display:none; z-index:60 }
-
-    .cta{ position:fixed; right:14px; bottom:14px; width:min(92vw,340px); display:none; z-index:40 }
-  </style>
-  <style>
-    /* ==== OLYMPUS THEME ADD-ONS ==== */
-    body{
-      background:
-        radial-gradient(1400px 800px at 10% -10%, rgba(255,223,128,.14), transparent 55%),
-        radial-gradient(1400px 800px at 110% 0%, rgba(77,200,255,.12), transparent 55%),
-        linear-gradient(180deg,#0a0e13 0%, #0e1420 60%, #0a0e13 100%),
-        url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%221200%22 height=%22800%22><defs><linearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22><stop offset=%220%25%22 stop-color=%22%23ffffff08%22/><stop offset=%22100%25%22 stop-color=%22%23ffffff00%22/></linearGradient></defs><g fill=%22url(%23g)%22><ellipse cx=%22600%22 cy=%22200%22 rx=%22500%22 ry=%22160%22/><ellipse cx=%22800%22 cy=%22300%22 rx=%22500%22 ry=%22160%22/><ellipse cx=%22400%22 cy=%22360%22 rx=%22500%22 ry=%22160%22/></g></svg>') center/cover no-repeat;
-      background-attachment: fixed;
-    }
-    .machine{
-      position:relative;
-      border:2px solid #332200;
-      box-shadow:
-        0 30px 60px rgba(0,0,0,.55),
-        inset 0 0 0 1px rgba(255,255,255,.06),
-        inset 0 10px 18px rgba(0,0,0,.35),
-        0 0 0 3px rgba(255,198,99,.06);
-    }
-    .machine::before{
-      content:""; position:absolute; inset:-8px; border-radius:36px; pointer-events:none;
-      background:linear-gradient(145deg,#7a4e00,#ffcf66 35%,#a36a00 60%,#ffd770 85%);
-      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite:xor; mask-composite:exclude; padding:8px; border-radius:36px; opacity:.2;
-    }
-    .bezel{ background:
-      radial-gradient(circle at 50% -40%, rgba(255,255,255,.18), transparent 60%),
-      linear-gradient(180deg, rgba(255,248,224,.06), rgba(255,255,255,.02));
-      border:1px solid rgba(255,221,160,.18);
-    }
-    .ornament{
-      position:absolute; inset:8px; border-radius:26px; pointer-events:none;
-      background: linear-gradient(180deg, rgba(255,215,112,.15), rgba(255,215,112,.02));
-      box-shadow: inset 0 0 0 1px rgba(255,215,112,.22);
-    }
-    /* Character panel */
-    .char-panel{ position:absolute; right:-160px; top:30px; width:140px; height:380px; display:none }
-    @media (min-width: 1100px){ .char-panel{ display:block } }
-    .char-card{ width:100%; height:100%; border-radius:24px; overflow:hidden; border:1px solid rgba(255,255,255,.08); background:linear-gradient(180deg,#0f1825,#111a28); box-shadow:0 20px 40px rgba(0,0,0,.45) }
-    .char-card .img{ width:100%; height:70%; background: url('https://images.unsplash.com/photo-1604335399105-cb9dce0bf05b?q=80&w=480&auto=format&fit=crop') center/cover no-repeat; filter:contrast(1.15) saturate(1.1) }
-    .char-card .meta{ height:30%; display:flex; align-items:center; justify-content:center; font-weight:800; color:#ffd770 }
-
-    /* Settings panel */
-    .settings{ position:fixed; left:14px; bottom:14px; z-index:60 }
-    .settings .panel{ display:none; margin-top:8px }
-
-    /* Mega Spin overlay */
-    .mega{ position:fixed; inset:0; background:radial-gradient(1200px 800px at 50% 20%, rgba(255,215,112,.18), rgba(0,0,0,.85)), rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:70 }
-    .mega .inner{ text-align:center; max-width:700px; width:92vw; border-radius:28px; padding:28px; border:1px solid rgba(255,255,255,.12); background:linear-gradient(180deg,#0c1320,#0f1a2a); box-shadow:0 20px 60px rgba(0,0,0,.6) }
-    .mega .title{ font-size:clamp(24px,4vw,40px); font-weight:900; letter-spacing:.5px; text-transform:uppercase; color:#ffd770; text-shadow:0 2px 18px rgba(255,215,112,.35) }
-    .rays{ position:absolute; inset:0; pointer-events:none; background:
-      conic-gradient(from 0deg, rgba(255,215,112,.0) 0%, rgba(255,215,112,.35) 8%, rgba(255,215,112,.0) 16%)
-      ; -webkit-mask: radial-gradient(circle at 50% 50%, black 45%, transparent 50%); animation: spinRays 6s linear infinite }
-    @keyframes spinRays { to { transform: rotate(360deg) } }
-  </style>
-</head>
-<body>
-  <!-- SVG icons (crisp symbols) -->
-  <svg width="0" height="0" style="position:absolute" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <symbol id="gem-blue" viewBox="0 0 64 64">
-      <defs><linearGradient id="gb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9ee6ff"/><stop offset="1" stop-color="#0aa3ff"/></linearGradient></defs>
-      <path d="M32 4 8 20l8 28h32l8-28z" fill="url(#gb)" stroke="#0e69b6" stroke-width="2"/>
-      <path d="M32 4 24 20l8 28 8-28z" fill="#ffffff20"/>
-    </symbol>
-    <symbol id="gem-red" viewBox="0 0 64 64">
-      <defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9ea6"/><stop offset="1" stop-color="#ff234a"/></linearGradient></defs>
-      <path d="M32 4 8 20l8 28h32l8-28z" fill="url(#gr)" stroke="#a10c1e" stroke-width="2"/>
-      <path d="M32 4 24 20l8 28 8-28z" fill="#ffffff20"/>
-    </symbol>
-    <symbol id="crown" viewBox="0 0 64 64">
-      <path d="M6 48h52l-4-24-12 10-10-16-10 16-12-10z" fill="#ffcf4b" stroke="#b37b0b" stroke-width="2"/>
-      <circle cx="12" cy="22" r="4" fill="#ff2f68"/><circle cx="32" cy="16" r="4" fill="#57f0ff"/><circle cx="52" cy="22" r="4" fill="#8bff5c"/>
-    </symbol>
-  </svg>
-
-  <!-- Near-miss Toast -->
-  <div id="toast" class="toast">Neredeyse! Bir çevir daha ⚡️</div>
-
-  <div class="rig">
-    <!-- Progression Bar & Badges -->
-    <div class="w-full max-w-[760px] mx-auto mb-3 px-3">
-      <div class="flex items-center justify-between text-sm text-white/70">
-        <div class="flex items-center gap-2"><span class="hidden sm:inline">Görev:</span> <b>3 çevir → 🎁</b> · <b>5 çevir → %50 Bonus</b></div>
-        <div class="flex items-center gap-2"><span id="badge3" class="px-2 py-0.5 rounded-full bg-white/10">🎁</span><span id="badge5" class="px-2 py-0.5 rounded-full bg-white/10">%50</span></div>
-      </div>
-      <div class="progress mt-2 bg-white/10 border border-white/10"><div id="progressFill"></div></div>
+  <body class="flex flex-col items-center justify-center min-h-screen p-6">
+    <div class="text-center mb-8">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/3/36/Neon_font_F.svg"
+        alt="Fixbet Logo"
+        class="mx-auto w-24 mb-3"
+      />
+      <h1 class="text-3xl font-extrabold neon-text">
+        Fixbet | Zbahis | Matadorbet
+      </h1>
+      <p class="text-gray-400 mt-2 text-sm">
+        Resmi Güncel Link Ağı – Tek Tıkla Tüm Markalara Ulaş
+      </p>
     </div>
 
-    <div id="machine" class="machine">
-      <div class="ornament"></div>
-      <div class="char-panel">
-        <div class="char-card">
-          <div class="img"></div>
-          <div class="meta">OLYMPUS</div>
-        </div>
-      </div>
-      <div class="bezel">
-        <div class="reflection"></div>
-        <div id="reelWrap" class="flex items-center justify-center gap-4 sm:gap-6 relative">
-          <div class="reel"><div class="strip" id="strip1"></div></div>
-          <div class="reel"><div class="strip" id="strip2"></div></div>
-          <div class="reel"><div class="strip" id="strip3"></div></div>
-          <div id="lever" class="lever hidden sm:block"></div>
-        </div>
+    <div class="w-full max-w-sm space-y-4">
+      <!-- Fixbet -->
+      <a
+        href="https://cutt.ly/VrIeOREp"
+        target="_blank"
+        class="btn block text-center py-3 rounded-2xl bg-[#08120A] gradient-border font-semibold"
+      >
+        💚 Fixbet Giriş
+      </a>
 
-        <div class="mt-4 grid grid-cols-3 gap-2 sm:gap-3 panel text-center">
-          <div class="cell"><div class="text-xs text-white/60">Bahis</div><div class="v text-lg sm:text-xl">₺4</div></div>
-          <div class="cell"><div class="text-xs text-white/60">Tur</div><div id="spinCount" class="v text-lg sm:text-xl">0/5</div></div>
-          <div class="cell"><div class="text-xs text-white/60">Kazanç</div><div id="winAmount" class="v text-lg sm:text-xl" style="color:#ffd770">₺0</div></div>
-        </div>
+      <!-- Zbahis -->
+      <a
+        href="https://cutt.ly/jr2tH2qC"
+        target="_blank"
+        class="btn block text-center py-3 rounded-2xl bg-[#0B1E2E] gradient-border font-semibold"
+      >
+        💎 Zbahis Giriş
+      </a>
 
-        <div class="mt-4 flex items-center justify-center">
-          <button id="btnSpin" class="px-7 py-3 rounded-2xl bg-gradient-to-b from-gold to-gold2 text-black font-extrabold shadow-glow hover:brightness-105 active:brightness-95">Döndür</button>
-        </div>
-      </div>
-    </div>
-    <!-- TOP HUD -->
-    <div class="mt-4 mx-auto max-w-[760px] flex items-center justify-center text-[14px] sm:text-[15px] font-extrabold bg-white/5 border border-white/10 rounded-xl py-2 px-3 sm:px-4">
-      <span class="text-white/70">TAKLA KAZANCI</span>
-      <span id="tumbleWin" class="ml-2 text-gold">₺0</span>
-    </div>
+      <!-- Matadorbet -->
+      <a
+        href="#"
+        target="_blank"
+        class="btn block text-center py-3 rounded-2xl bg-[#2A3249] gradient-border font-semibold"
+      >
+        🐂 Matadorbet Giriş
+      </a>
 
-    <!-- BOTTOM BAR + ticker + big spin -->
-    <div class="mx-auto mt-3 max-w-[780px] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 bg-black/30 border border-white/10 rounded-2xl px-3 sm:px-4 py-3">
-      <div class="flex items-center gap-4 text-white/80 text-sm">
-        <div>KREDİ: <b id="credit">₺254.211</b></div>
-        <div>BAHİS: <b id="bet">₺4</b></div>
-      </div>
-      <div class="relative overflow-hidden h-6 flex-1 order-3 sm:order-none">
-        <div id="ticker" class="absolute whitespace-nowrap animate-ticker text-white/70 text-sm">Son 10 dakikada <b>27</b> kişi bonus aldı • Canlı: Ayşe ₺5.000 → Onur ₺2.000 → Sena ₺12.500 → Kerem ₺3.250 → Elif ₺7.800</div>
-      </div>
-      <button id="bigSpin" class="self-center sm:self-auto relative w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-gradient-to-b from-gold to-gold2 text-black font-extrabold shadow-glow">⟳</button>
-    </div>
-  </div>
+      <!-- Telegram -->
+      <a
+        href="https://t.me/zbahiscom"
+        target="_blank"
+        class="btn block text-center py-3 rounded-2xl bg-[#1A1A1A] font-semibold border border-gray-700"
+      >
+        📲 Telegram Kanalı
+      </a>
 
-  <!-- Final Modal (exit intent ve spin sonrası) -->
-  <div id="doneModal" class="modal">
-    <div class="max-w-md w-full rounded-2xl bg-[#101621] border border-white/10 p-6 text-center shadow-glow">
-      <div class="text-2xl font-extrabold">Bakiyenizi çekmeniz için</div>
-      <div class="mt-2 text-white/80">botumuza <b>abone olun</b> ve <b>anlaşmalı siteye</b> gidin.</div>
-      <div class="mt-5 flex items-center justify-center gap-3">
-        <a id="goBtn" target="_blank" rel="noopener" class="px-6 py-3 rounded-2xl bg-gradient-to-b from-gold to-gold2 text-black font-extrabold shadow-glow hover:brightness-105">Devam Et</a>
-        <button id="closeBtn" class="px-6 py-3 rounded-2xl bg-white/10 text-white hover:bg-white/15">Kapat</button>
+      <!-- Bonus -->
+      <div
+        class="p-4 mt-6 bg-gradient-to-r from-[#25FFE6] to-[#A9EE16] rounded-2xl text-black font-semibold text-center glow"
+      >
+        🎁 %300 Hoşgeldin Bonusu Seni Bekliyor!  
+        <br />
+        <a href="https://cutt.ly/VrIeOREp" target="_blank" class="underline"
+          >HEMEN AL</a
+        >
       </div>
     </div>
-  </div>
 
-  <!-- Mega Spin Overlay -->
-  <div id="mega" class="mega">
-    <div class="inner relative">
-      <div class="rays"></div>
-      <div class="title mb-3">MEGA SPIN</div>
-      <div class="text-white/80 mb-4">Şans çemberi parlıyor! Bedava mega çeviri kullan.</div>
-      <button id="megaSpin" class="px-6 py-3 rounded-2xl bg-gradient-to-b from-gold to-gold2 text-black font-extrabold shadow-glow">MEGA ÇEVİR</button>
-    </div>
-  </div>
-
-  <!-- Settings (sound/haptics/quality) -->
-  <div class="settings">
-    <button id="btnSettings" class="px-3 py-2 rounded-xl bg-white/10 border border-white/10">⚙️ Ayarlar</button>
-    <div id="panelSettings" class="panel rounded-2xl bg-[#0f1622] border border-white/10 shadow-glow p-4 w-[260px]">
-      <div class="flex items-center justify-between mb-2"><span>Ses</span><label class="inline-flex items-center gap-2"><input id="chkSound" type="checkbox" class="accent-yellow-400" checked><span>Açık</span></label></div>
-      <div class="flex items-center justify-between mb-2"><span>Vibration</span><label class="inline-flex items-center gap-2"><input id="chkVib" type="checkbox" class="accent-yellow-400" checked><span>Açık</span></label></div>
-      <div class="flex items-center justify-between mb-2"><span>Görsel kalite</span>
-        <select id="selQuality" class="bg-white/10 border border-white/10 rounded-lg px-2 py-1">
-          <option value="high" selected>Yüksek</option>
-          <option value="med">Orta</option>
-          <option value="low">Düşük</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <!-- Countdown CTA -->
-  <div id="cta" class="cta">
-    <div class="rounded-2xl bg-[#0f1622] border border-white/10 shadow-glow p-4 flex items-center gap-3">
-      <div class="shrink-0 w-10 h-10 rounded-xl bg-gradient-to-b from-gold to-gold2"></div>
-      <div class="flex-1">
-        <div class="text-sm">Abone ol – Anlaşmalı siteye git</div>
-        <div class="text-white/60 text-xs">Yönlendirme <span id="count">12</span>s içinde</div>
-      </div>
-      <a id="ctaGo" target="_blank" rel="noopener" class="px-3 py-2 rounded-xl bg-gradient-to-b from-gold to-gold2 text-black font-bold">Git</a>
-    </div>
-  </div>
-
-  <script>
-    /* === Rastgele yönlendirme linkleri === */
-    const LINKS = [
-      'https://t.me/mockerabi_bot','https://t.me/tarafbetGitBOT','https://t.me/betine_denemebonusbot','https://t.me/denemekutubot','https://t.me/DenemeKutusubot','https://t.me/Denemebonusuveren1bot','https://t.me/Marsbahis1casibombot','https://t.me/Yapayzekabah1sbot'
-    ];
-    const UTM = { source:'slot', medium:'cta', campaign:'olympus_v1' };
-    function addUTM(url, ctx){
-      try{
-        const u = new URL(url);
-        if(u.hostname.includes('t.me')){
-          // Telegram botlar için start paramı kullan
-          const token = `utm_${UTM.source}_${UTM.medium}_${UTM.campaign}_${ctx}`;
-          if(!u.searchParams.has('start')) u.searchParams.set('start', token);
-          return u.toString();
-        } else {
-          u.searchParams.set('utm_source', UTM.source);
-          u.searchParams.set('utm_medium', UTM.medium);
-          u.searchParams.set('utm_campaign', `${UTM.campaign}_${ctx}`);
-          return u.toString();
-        }
-      }catch{ return url }
-    }
-    function pickLinkWithUTM(ctx='generic'){ const raw = LINKS[Math.floor(Math.random()*LINKS.length)]; return addUTM(raw, ctx); }
-
-    /* === Slot temel === */
-    const SVGs = ['gem-blue','gem-red','crown'];
-    const EMOJIS = ['🍋','🍒','🔔'];
-    const symbols = SVGs.map((id,idx) => `<div class="symwrap"><svg width="56" height="56" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><use href="#${id}" xlink:href="#${id}"></use></svg><span class=\"emoji\" aria-hidden=\"true\">${EMOJIS[idx%EMOJIS.length]}</span></div>`);
-    const ROW_H = 120, VISIBLE = 3, REPEAT = 90;
-    const strips = ['strip1','strip2','strip3'].map(id=>document.getElementById(id));
-    strips.forEach(s=>{
-      const frag = document.createDocumentFragment();
-      for(let i=0;i<REPEAT;i++){ const el=document.createElement('div'); el.className='symbol'; el.innerHTML = symbols[i%symbols.length]; frag.appendChild(el); }
-      s.appendChild(frag); s.style.transform='translateY(0)';
-    });
-
-    // SVG fallback tespiti (bazı tarayıcılarda <use> görünmeyebilir)
-    try{
-      const test = document.createElementNS('http://www.w3.org/2000/svg','svg');
-      const use = document.createElementNS('http://www.w3.org/2000/svg','use');
-      use.setAttributeNS('http://www.w3.org/1999/xlink','xlink:href','#gem-blue');
-      test.appendChild(use); document.body.appendChild(test);
-      const bbox = test.getBBox();
-      if(!bbox || !bbox.width){ document.body.classList.add('no-svg'); }
-      test.remove();
-    }catch(e){ document.body.classList.add('no-svg'); }
-
-    const machine = document.getElementById('machine');
-    const reelWrap = document.getElementById('reelWrap');
-    const lever   = document.getElementById('lever');
-    const btnSpin = document.getElementById('btnSpin');
-    const bigSpin = document.getElementById('bigSpin');
-    const spinCountEl = document.getElementById('spinCount');
-    const winAmountEl = document.getElementById('winAmount');
-    const tumbleWinEl = document.getElementById('tumbleWin');
-    const doneModal = document.getElementById('doneModal');
-    const goBtn = document.getElementById('goBtn');
-    const closeBtn = document.getElementById('closeBtn');
-    const progressFill = document.getElementById('progressFill');
-    const badge3 = document.getElementById('badge3');
-    const badge5 = document.getElementById('badge5');
-    const toast = document.getElementById('toast');
-    const cta = document.getElementById('cta');
-    const countEl = document.getElementById('count');
-    const ctaGo = document.getElementById('ctaGo');
-
-    let totalSpins = 5, spinsDone = 0, spinning = false, streak = 0;
-
-    /* === A/B microcopy === */
-    const SPIN_VARIANTS = ['Döndür','Mega Çevir','Şansını Dene'];
-    const abSeed = Math.floor(Math.random()*1000);
-    btnSpin.textContent = SPIN_VARIANTS[abSeed % SPIN_VARIANTS.length];
-
-    /* === WebAudio sesleri === */
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    let soundOn = JSON.parse(localStorage.getItem('soundOn') ?? 'true');
-    let vibOn = JSON.parse(localStorage.getItem('vibOn') ?? 'true');
-    let audio = null; try{ audio = new AudioCtx(); }catch(e){ audio = null; }
-    function tone(f=880, ms=120, gain=0.07, type='sine'){
-      if(!soundOn || !audio) return;
-      const o=audio.createOscillator(), g=audio.createGain();
-      o.type=type; o.frequency.value=f; g.gain.value=gain;
-      o.connect(g).connect(audio.destination); o.start();
-      setTimeout(()=>o.stop(), ms);
-    }
-    function motorStart(){ tone(180,140,.035,'sawtooth'); }
-    function motorRun(step){ tone(220+step*10,60,.02,'sawtooth'); }
-    function tick(){ tone(600,45,.045,'square'); }
-    function winSmall(){ tone(820,120,.08); setTimeout(()=>tone(980,140,.09),120); }
-    function winBig(){ const seq=[540,700,860,1020,1260,1480]; let t=0; for(const f of seq){ setTimeout(()=>tone(f,140,.1),t); t+=160; } }
-
-    const fmt = n => '₺' + Number(n).toLocaleString('tr-TR');
-
-    function updateSpinUI(){ spinCountEl.textContent = `${spinsDone}/${totalSpins}`; }
-    function updateProgress(){ const pct = Math.min(100, (spinsDone/5)*100); progressFill.style.width = pct+'%'; if(spinsDone>=3) badge3.classList.add('bg-emerald-600/30'); if(spinsDone>=5) badge5.classList.add('bg-emerald-600/30'); }
-    function showToast(msg){ toast.textContent = msg; toast.style.display='block'; setTimeout(()=>toast.style.display='none', 1400); }
-    function nearMiss(){ reelWrap.classList.add('animate-shake'); showToast('Neredeyse! Bir çevir daha ⚡️'); (vibOn && navigator.vibrate) && navigator.vibrate([20,30,20]); setTimeout(()=>reelWrap.classList.remove('animate-shake'), 620); }
-
-    function amountAnim(add){
-      const cur = Number(winAmountEl.textContent.replace(/[^0-9]/g,''))||0, target = cur + add;
-      const start = performance.now(), dur = 650; winAmountEl.classList.add('winflash');
-      requestAnimationFrame(function step(t){ const p=Math.min(1,(t-start)/dur); winAmountEl.textContent=fmt(Math.round(cur+(target-cur)*p)); if(p<1) requestAnimationFrame(step); else setTimeout(()=>winAmountEl.classList.remove('winflash'),280); });
-    }
-    function coinsBurst(x,y,count=18){ for(let i=0;i<count;i++){ const c=document.createElement('div'); c.className='coin'; const ang=Math.random()*Math.PI*2, dist=140+Math.random()*160; c.style.setProperty('--x', Math.cos(ang)*dist+'px'); c.style.setProperty('--y', (Math.sin(ang)*dist-60)+'px'); c.style.left=x+'px'; c.style.top=y+'px'; document.body.appendChild(c); c.style.animation='coin .9s ease-out forwards'; setTimeout(()=>c.remove(), 920); } }
-
-    // Yüksek ödemeler
-    const PAY_SMALL=2000, PAY_MED=5000, PAY_BIG=50000;
-
-    // Senaryo: 1-2 küçük, 3 near-miss, 4 boş, 5 büyük
-    function riggedTargets(){ if(spinsDone===0) return [0,0,0]; if(spinsDone===1) return [1,1,1]; if(spinsDone===2) return [1,1,2]; if(spinsDone===3) return [0,1,2]; return [2,2,2]; }
-
-    async function spinOnce(){
-      if(spinning) return; spinning = true; try{ audio.resume && audio.resume(); }catch{}
-      machine.classList.add('spin-tilt'); if(lever){ lever.style.transform='rotate(28deg)'; setTimeout(()=>lever.style.transform='rotate(0deg)',260); }
-
-      const targets = riggedTargets();
-
-      motorStart(); for(let i=0;i<6;i++) setTimeout(()=>motorRun(i), 80*i);
-
-      strips.forEach((s,i)=>{
-        const durUp=260+i*40, durHold=720+i*80, durDown=560+i*160; const rounds=8+i*2; const stopRow= rounds*3 + (targets[i] + Math.floor(3/2));
-        s.classList.add('spin-blur');
-        s.style.transition = `transform ${durUp}ms cubic-bezier(.2,.7,.2,1)`; s.style.transform  = `translateY(-${(rounds*0.25)*3*ROW_H}px)`;
-        setTimeout(()=>{ s.style.transition = `transform ${durHold}ms linear`; s.style.transform  = `translateY(-${(rounds*0.75)*3*ROW_H}px)`; }, durUp);
-        setTimeout(()=>{ s.style.transition = `transform ${durDown}ms cubic-bezier(.1,.9,.2,1)`; s.style.transform  = `translateY(-${stopRow*ROW_H}px)`; setTimeout(()=>{ s.classList.remove('spin-blur'); s.classList.add('animate-tick'); tick(); setTimeout(()=>s.classList.remove('animate-tick'),60); }, durDown-90); }, durUp+durHold);
-      });
-
-      const wait = 260+40*2 + 720+80*2 + 560+160*2 + 120; await new Promise(r=>setTimeout(r, wait));
-
-      strips.forEach((s,i)=>{ s.style.transition=''; const final = -((targets[i] + Math.floor(3/2)) % REPEAT) * ROW_H; s.style.transform = `translateY(${final}px)`; });
-
-      // Near-miss kontrolü (tam 2 aynı 1 farklı)
-      if((targets[0]===targets[1] && targets[2]!==targets[0]) || (targets[1]===targets[2] && targets[0]!==targets[1]) || (targets[0]===targets[2] && targets[1]!==targets[0])){ nearMiss(); }
-
-      // ödeme
-      let payout = 0; if(targets[0]===targets[1] && targets[1]===targets[2]){ payout = targets[0]===0?PAY_SMALL : (targets[0]===1?PAY_MED : PAY_BIG); }
-      if(payout>0){ amountAnim(payout); tumbleWinEl.textContent = '+ ' + fmt(payout); setTimeout(()=>tumbleWinEl.textContent='₺0', 1400); const r = winAmountEl.getBoundingClientRect(); coinsBurst(r.left+r.width/2, r.top+window.scrollY-10, payout>=PAY_MED?34:20); (payout>=PAY_MED? winBig : winSmall)(); streak++; } else { streak=0; }
-
-      spinsDone++; updateSpinUI(); updateProgress(); (vibOn && navigator.vibrate) && navigator.vibrate(20); machine.classList.remove('spin-tilt');
-
-      // Streak bonusları
-      if(streak===3){ showToast('+₺25 bonus'); }
-      if(streak===5){ showToast('MEGA SPIN!'); document.getElementById('mega').style.display='flex'; }
-
-      if(spinsDone>=totalSpins){
-        if(spinsDone>0){
-          const link = pickLinkWithUTM('modal');
-          goBtn.href = link;
-          doneModal.style.display = 'flex';
-        }
-       }
-      spinning = false;
-    }
-
-    btnSpin.addEventListener('click', spinOnce);
-    bigSpin.addEventListener('click', spinOnce);
-    closeBtn.addEventListener('click', ()=> doneModal.style.display='none');
-    goBtn.addEventListener('click', ()=> doneModal.style.display='none');
-
-    // Countdown CTA (12s sonra görünür)
-    const startCTA = ()=>{ let t=12; const link = pickLinkWithUTM('cta'); ctaGo.href = link; cta.style.display='block'; const iv=setInterval(()=>{ t--; countEl.textContent=t; if(t<=0){ clearInterval(iv); showToast('Bonus hazır!'); } },1000); };
-    setTimeout(startCTA, 4000);
-
-    // Exit intent (masaüstü): üst kenara yaklaşınca modal
-    document.addEventListener('mousemove', (e)=>{ if(e.clientY < 14){ const link = pickLinkWithUTM('exit_intent'); goBtn.href = link; doneModal.style.display = 'flex'; } }, {passive:true});
-    // Settings interactions
-    const btnSettings = document.getElementById('btnSettings');
-    const panelSettings = document.getElementById('panelSettings');
-    const chkSound = document.getElementById('chkSound');
-    const chkVib = document.getElementById('chkVib');
-    const selQuality = document.getElementById('selQuality');
-
-    panelSettings.style.display='none';
-    chkSound.checked = soundOn; chkVib.checked = vibOn;
-
-    btnSettings.addEventListener('click', ()=>{ panelSettings.style.display = panelSettings.style.display==='none'?'block':'none'; });
-    chkSound.addEventListener('change', ()=>{ soundOn = chkSound.checked; localStorage.setItem('soundOn', JSON.stringify(soundOn)); });
-    chkVib.addEventListener('change', ()=>{ vibOn = chkVib.checked; localStorage.setItem('vibOn', JSON.stringify(vibOn)); });
-    selQuality.addEventListener('change', ()=>{
-      const q = selQuality.value;
-      document.querySelectorAll('.strip').forEach(s=>{
-        s.style.filter = (q==='low') ? 'none' : (q==='med' ? 'blur(.6px) drop-shadow(0 2px 2px rgba(0,0,0,.35))' : 'blur(1.2px) drop-shadow(0 2px 2px rgba(0,0,0,.35))');
-      });
-    });
-
-    // Mega Spin button
-    const mega = document.getElementById('mega');
-    const megaSpin = document.getElementById('megaSpin');
-    megaSpin.addEventListener('click', async ()=>{
-      mega.style.display='none';
-      // küçük bir gösterişli efekt
-      showToast('Mega Spin başlıyor!');
-      await new Promise(r=>setTimeout(r,400));
-      // Zorunlu büyük kazanım
-      const targets = [2,2,2];
-      strips.forEach((s,i)=>{
-        const durUp=260+i*40, durHold=720+i*80, durDown=560+i*160; const rounds=10+i*2; const stopRow= rounds*3 + (targets[i] + Math.floor(3/2));
-        s.classList.add('spin-blur');
-        s.style.transition = `transform ${durUp}ms cubic-bezier(.2,.7,.2,1)`; s.style.transform  = `translateY(-${(rounds*0.25)*3*ROW_H}px)`;
-        setTimeout(()=>{ s.style.transition = `transform ${durHold}ms linear`; s.style.transform  = `translateY(-${(rounds*0.75)*3*ROW_H}px)`; }, durUp);
-        setTimeout(()=>{ s.style.transition = `transform ${durDown}ms cubic-bezier(.1,.9,.2,1)`; s.style.transform  = `translateY(-${stopRow*ROW_H}px)`; setTimeout(()=>{ s.classList.remove('spin-blur'); tick(); }, durDown-90); }, durUp+durHold);
-      });
-      const wait = 260+40*2 + 720+80*2 + 560+160*2 + 120; await new Promise(r=>setTimeout(r, wait));
-      strips.forEach((s,i)=>{ s.style.transition=''; const final = -((targets[i] + Math.floor(3/2)) % REPEAT) * ROW_H; s.style.transform = `translateY(${final}px)`; });
-      // büyük kazanç efekti
-      const payout = 50000; amountAnim(payout); const r = winAmountEl.getBoundingClientRect(); coinsBurst(r.left+r.width/2, r.top+window.scrollY-10, 40); winBig();
-      const link = pickLinkWithUTM('mega'); goBtn.href = link; doneModal.style.display = 'flex';
-    });
-  </script>
-</body>
+    <footer class="mt-10 text-xs text-gray-500 text-center">
+      <p>© 2025 Tüm Hakları Saklıdır | 18+ | Sorumlu Oyun Oynayınız</p>
+    </footer>
+  </body>
 </html>
